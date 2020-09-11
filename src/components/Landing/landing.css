@@ -1,0 +1,114 @@
+html, body, #root, .App  {
+    font-family: 'Circular';
+    font-weight: 900;
+    width: 100%;
+    height: auto;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    align-self: center;
+}
+
+h1 {
+    font-size: 3em;
+    font-weight: 700;
+}
+
+nav {
+    border-bottom: 1px #111 solid;
+    padding: 1em;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.disabled-link {
+    text-decoration: none;
+    color: gray;
+    pointer-events: none;
+}
+
+.dashboard {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.project, .proposal__link {
+    width: 80%;
+    color: black;
+    border-color: #c7c7c7;
+    border-style: solid;
+    border-width: 1px 1px 3px 1px;
+    border-radius: 4px;
+    background-color: #fff; 
+    margin-bottom: 15px;
+    height: 60px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    
+}
+
+.project a, .proposal__link {
+    display: flex;
+    height: 60px;
+    align-items: center;
+    justify-content: space-evenly;
+    text-decoration: none;
+
+}
+
+.project__list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.project__change {
+    width: 80%;
+    background-color: #7b9dd8;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+}
+
+.typelist {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    height: auto;
+}
+
+.typeoption {
+    flex: 1 0 40%;
+    padding: 2px;
+    height: 100px;
+    background: #091e42;
+    color: white;
+    border-radius: 8px;
+    margin-left: 5px;
+    margin-bottom: 5px;
+}
+
+iframe {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.avatar {
+    font-size: 18px;
+    background: purple;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 35px;
+    height: 35px;
+}
