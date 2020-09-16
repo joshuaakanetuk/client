@@ -8,20 +8,51 @@ import { format, formatDistance } from "date-fns";
 class ProjectDetail extends React.Component {
   static contextType = AppContext;
   state = {
-    project: null,
+    project: {
+      id: '',
+      name: '',
+      status: '',
+      admin_approval: '',
+      client_approval: '',
+      start_timeframe: '',
+      proposal: '',
+      notes: [],
+      deliverables: []
+
+    },
+    notes: [],
     changelog: "",
     note: "",
     proposalUrl: "",
     feedback: "",
   };
+  componentDidMount() {  
+    this.context.getProject(1)
+      .then(data => {
+        console.log(data)
+        // this.setState({ notes: data})
+      }) 
+    this.context.getNotes("1")
+      .then(data => {
+        this.setState({ notes: data})
+      })
+  }
   handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
   render() {
+    
     const { match, history } = this.props;
-    const project = this.context.projects.filter(
+    let project = this.context.projects.filter(
       (project) => project.id === match.params.projectId
     )[0];
+
+      console.log(project)
+
+    if (project == undefined) {
+      project = this.state.project;
+    }
+    
     return (
       <div
         style={{
@@ -71,7 +102,7 @@ class ProjectDetail extends React.Component {
         >
           <div style={{ alignItems: "center" }}>
             <Clock size={12} />
-            {formatDistance(new Date(project.timeframe), new Date()) + ` ago.`}
+            {/* {formatDistance(new Date(project.start_timeframe), new Date()) + ` ago.`} */}
           </div>
           <div>
             {<DollarSign size={12} />}
@@ -81,9 +112,9 @@ class ProjectDetail extends React.Component {
         {project.proposal && project.proposal.url.length > 0 ? (
           <>
             <Iframe
-              url={project.proposal.url}
-              width={project.proposal.width}
-              height={project.proposal.height}
+              // url={project.proposal.url}
+              // width={project.proposal.width}
+              // height={project.proposal.height}
             />
           </>
         ) : (
@@ -115,7 +146,7 @@ class ProjectDetail extends React.Component {
         </Permission>
 
         <span>Feedback:</span>
-        {project.notes.map((notes) => {
+        {this.state.notes.map((notes) => {
           if (notes.type === "feedback")
             return (
               <div className="project__feedback">
@@ -182,15 +213,15 @@ class ProjectDetail extends React.Component {
         )}
         <h3>Type: {project.type}</h3>
         {/* DELIVERABLES */}
-        <div className="project_deliverables">
+        {/* <div className="project_deliverables">
             <h3>Deliverables</h3>
           {project.deliverables.map((deliver) => {
             return <div>{deliver.emoji}: {deliver.name}</div>;
           })}
-        </div>
+        </div> */}
         <div className="project__changelog">
           <span>Changelog:</span>
-          {project.notes.map((notes, i) => {
+          {this.state.notes.map((notes, i) => {
             if (notes.type === "changelog")
               return (
                 <div key={i} className="project__change">
@@ -242,7 +273,7 @@ class ProjectDetail extends React.Component {
         </Permission>
         <div className="project__notes">
           <span>Notes:</span>
-          {project.notes.map((notes) => {
+          {this.state.notes.map((notes) => {
             if (notes.type === "notes")
               return (
                 <div className="project__change">

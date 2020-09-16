@@ -26,12 +26,9 @@ class Nav extends React.Component {
         <Permission>
           <Link to="/dashboard/clients">Clients</Link>
         </Permission>
-        <Link to="/dashboard/chat" className="disabled-link">
+        {/* <Link to="/dashboard/chat" className="disabled-link">
           Chat
-        </Link>
-        <div onClick={() => this.context.changeUserType()}>
-          Currently: {this.context.typeUser.toUpperCase()}
-        </div>
+        </Link> */}
         <div className="avatar">
         {this.context.typeUser.toUpperCase()[0]}
         </div>

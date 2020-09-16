@@ -17,7 +17,7 @@ class Dashboard extends React.Component {
     let clientList = this.context.projects.filter(
       (project, i) =>
         project.status === "INITIAL" ||
-        (project.status === "DESIGN" && project.client_id === this.context.id)
+        (project.status === "DESIGN" && project.user_id === this.context.id)
     );
 
     return (

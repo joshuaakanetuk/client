@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { v4 as uuidv4 } from "uuid";
-import Projects from "../STORE";
+import serve from "../services/thing-api-service.js"
 
 const AppContext = React.createContext({
   projects: [],
@@ -8,7 +8,10 @@ const AppContext = React.createContext({
   error: null,
   setError: () => {},
   changeUserType: () => {},
+  getNotes: () => {},
+  getProject: () => {},
   updateNotes: () => {},
+  deleteNote: () => {},
   updateApproval: () => {},
   submitProposal: () => {},
   updateProposal: () => {},
@@ -19,10 +22,41 @@ export default AppContext;
 export class AppProvider extends Component {
   state = {
     typeUser: "client",
-    projects: Projects,
+    projects: [],
     error: null,
     id: 1,
   };
+
+  componentDidMount() {
+    serve.getProjects()
+      .then(data => {
+        this.setState({
+          projects: data
+        })
+      })
+  }
+
+  getNotes(id) {
+    return serve.getProjectNotes(id)
+    .then(data => {
+      return data
+    })
+    .catch(err => console.log(err))
+  }
+
+  getProject(id) {
+    return serve.getProject(id)
+    .then(data => {
+      return data
+    })
+  }
+
+  deleteNote(id) {
+    return serve.deleteNote(id)
+    .then(data => {
+      return data;
+    })
+  }
 
   submitProposal = (project) => {
     console.log(project);
@@ -59,11 +93,11 @@ export class AppProvider extends Component {
   };
 
   //  Demo exclusive functions
-  changeUserType = () => {
-    const newUserType = this.state.typeUser === "client" ? "admin" : "client";
-    this.setState({ typeUser: newUserType });
-    console.log(this.state.typeUser);
-  };
+  // changeUserType = () => {
+  //   const newUserType = this.state.typeUser === "client" ? "admin" : "client";
+  //   this.setState({ typeUser: newUserType });
+  //   console.log(this.state.typeUser);
+  // };
 
   //update Proposal
   updateProposal = (id, url) => {
@@ -184,7 +218,10 @@ export class AppProvider extends Component {
       setError: this.setError,
       clearError: this.clearError,
       changeUserType: this.changeUserType,
+      getNotes: this.getNotes,
+      getProject: this.getProject,
       updateNotes: this.updateNotes,
+      deleteNote: this.deleteNote,
       submitProposal: this.submitProposal,
       updateProposal: this.updateProposal,
       updateApproval: this.updateApproval,
