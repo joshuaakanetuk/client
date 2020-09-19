@@ -11,7 +11,6 @@ class ProjectList extends React.Component{
         projects: []
     }
     render() {
-        console.log(this.props)
         return(
             <div className="project__list">
                 {this.props.projects.map((project, i) => <Project project={project} key={i} />)}

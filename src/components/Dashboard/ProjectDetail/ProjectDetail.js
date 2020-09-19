@@ -9,16 +9,15 @@ class ProjectDetail extends React.Component {
   static contextType = AppContext;
   state = {
     project: {
-      id: '',
-      name: '',
-      status: '',
-      admin_approval: '',
-      client_approval: '',
-      start_timeframe: '',
-      proposal: '',
+      id: "",
+      name: "",
+      status: "",
+      admin_approval: "",
+      client_approval: "",
+      start_timeframe: "",
+      proposal: "",
       notes: [],
-      deliverables: []
-
+      deliverables: [],
     },
     notes: [],
     changelog: "",
@@ -26,36 +25,34 @@ class ProjectDetail extends React.Component {
     proposalUrl: "",
     feedback: "",
   };
-  componentDidMount() {  
-    this.context.getProject(1)
-      .then(data => {
-        console.log(data)
-        // this.setState({ notes: data})
-      }) 
-    this.context.getNotes("1")
-      .then(data => {
-        this.setState({ notes: data})
-      })
+  componentDidMount() {
+    this.context.getProject(this.props.match.params.projectId).then((data) => {
+    });
+    this.context.getNotes(this.props.match.params.projectId).then((data) => {
+      this.setState({ notes: data });
+    });
+  }
+  goBack = () => {
+
   }
   handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
   render() {
-    
     const { match, history } = this.props;
     let project = this.context.projects.filter(
       (project) => project.id === match.params.projectId
     )[0];
 
-      console.log(project)
 
     if (project == undefined) {
       project = this.state.project;
     }
-    
+
     return (
       <div
         style={{
+          padding: '50px',
           width: "100%",
           display: "flex",
           flexDirection: "column",
@@ -63,7 +60,7 @@ class ProjectDetail extends React.Component {
           alignItems: "center",
         }}
       >
-        <button onClick={() => history.goBack()}>Back</button>
+        <div style={{border:"white 1px solid", padding: "6px 8px", borderRadius:"4px"}} onClick={() => history.goBack()}>Back</div>
         <br />
         <small style={{ color: "gray" }}>{project.id}</small>
         <br />
@@ -102,19 +99,19 @@ class ProjectDetail extends React.Component {
         >
           <div style={{ alignItems: "center" }}>
             <Clock size={12} />
-            {/* {formatDistance(new Date(project.start_timeframe), new Date()) + ` ago.`} */}
+            {project.start_timeframe && project.start_timeframe.length > 0 ? formatDistance(new Date(project.start_timeframe), new Date()) + ` ago.` :""}
           </div>
           <div>
             {<DollarSign size={12} />}
             Price: {project.price}
           </div>
         </div>
-        {project.proposal && project.proposal.url.length > 0 ? (
+        {project.proposal && project.proposal.length > 0 ? (
           <>
             <Iframe
-              // url={project.proposal.url}
-              // width={project.proposal.width}
-              // height={project.proposal.height}
+            url={project.proposal}
+            // width={800}
+            height={450}
             />
           </>
         ) : (
@@ -145,138 +142,43 @@ class ProjectDetail extends React.Component {
           )}
         </Permission>
 
-        <span>Feedback:</span>
-        {this.state.notes.map((notes) => {
-          if (notes.type === "feedback")
-            return (
-              <div className="project__feedback">
-                {notes.content}
-                <input
-                  onClick={
-                    (e) =>
-                      this.context.updateNotes(
-                        project.id,
-                        notes.id,
-                        "DELETE",
-                        "feedback"
-                      )
-                    // id, obj, action
-                  }
-                  type="button"
-                  value="Submit"
-                />
-              </div>
-            );
-          else return null;
-        })}
-        {project[this.context.typeUser + `_approval`] === false ? (
+        {project[this.context.typeUser + `_approval`] !== true ? (
           <>
             <br></br>
-            <textarea></textarea>
             <br></br>
             <button
               onClick={() => {
-                this.context.updateApproval(
-                    project.id,
-                  0,
-                  "I hate this."
-                );
+                const approval = false;
+                this.context.updateApproval(project.id, approval, "I hate this.");
               }}
             >
               Decline
             </button>
             <button
               onClick={() => {
-                this.context.updateApproval(
-                  project.id,
-                  1,
-                  "I love this."
-                );
+                const approval = true;
+                this.context.updateApproval(project.id, approval, "I love this.");
               }}
             >
               Approve
-            </button>
-            <button
-              onClick={() => {
-                this.context.updateApproval(
-                    project.id,
-                  2,
-                  "I'm okay with this."
-                );
-              }}
-            >
-              Change
             </button>
           </>
         ) : (
           ""
         )}
         <h3>Type: {project.type}</h3>
-        {/* DELIVERABLES */}
-        {/* <div className="project_deliverables">
-            <h3>Deliverables</h3>
-          {project.deliverables.map((deliver) => {
+        <div className="project_deliverables">
+            <h3>Deliverables:</h3>
+          {/* {project.deliverables[""].map((deliver) => {
             return <div>{deliver.emoji}: {deliver.name}</div>;
-          })}
-        </div> */}
-        <div className="project__changelog">
-          <span>Changelog:</span>
-          {this.state.notes.map((notes, i) => {
-            if (notes.type === "changelog")
-              return (
-                <div key={i} className="project__change">
-                  {notes.content}
-                  {/* {change.date.toString()} */}
-                  <Permission>
-                    <input
-                      onClick={
-                        (e) =>
-                          this.context.updateNotes(
-                            project.id,
-                            notes.id,
-                            "DELETE"
-                          )
-                        // id, obj, action
-                      }
-                      type="button"
-                      value="Submit"
-                    />
-                  </Permission>
-                </div>
-              );
-            else return null;
-          })}
+          })} */}
         </div>
-        <Permission>
-          <div>
-            <label>Add to changelog</label>
-            <br />
-            <input
-              name="changelog"
-              onChange={(e) => {
-                this.handleChange(e);
-              }}
-            />
-            <input
-              onClick={(e) =>
-                this.context.updateNotes(
-                  project.id,
-                  this.state.changelog,
-                  "POST",
-                  "changelog"
-                )
-              }
-              type="button"
-              value="Submit"
-            />
-          </div>
-        </Permission>
         <div className="project__notes">
           <span>Notes:</span>
-          {this.state.notes.map((notes) => {
+          {this.state.notes.map((notes, i) => {
             if (notes.type === "notes")
               return (
-                <div className="project__change">
+                <div key={i} className="project__change">
                   {notes.content}
                   {/* {change.date.toString()} */}
                   <input
@@ -288,37 +190,67 @@ class ProjectDetail extends React.Component {
                           "DELETE",
                           "notes"
                         )
+                        .then((data) => {
+                          this.setState({
+                            notes: this.state.notes.filter(note => note.id !== notes.id)
+                          })
+                        })
+                        .catch((err) => {
+                          console.log(err)
+                        })
                       // id, obj, action
                     }
                     type="button"
-                    value="Submit"
+                    value="Delete Note"
                   />
                 </div>
               );
             else return null;
           })}
-        </div>
-        <div>
           <label>Add a note.</label>
           <br />
           <textarea
+          value={this.state.note}
             name="note"
             onChange={(e) => {
               this.handleChange(e);
             }}
           />
-          <input
-            onClick={(e) =>
+          <button
+          value="Submit"
+            onClick={(e) =>{
               this.context.updateNotes(
                 project.id,
                 this.state.note,
                 "POST",
                 "notes"
               )
-            }
-            type="button"
-            value="Submit"
-          />
+              .then(data => {
+                this.setState({
+                  notes: [...this.state.notes, data]
+                })
+              })
+              .catch(err => console.log(err))
+
+              this.setState({
+                note: ''
+              });
+            }}
+          >
+            Submit
+          </button>
+        </div>
+        <div className="project__changelog">
+          <span>Changelog:</span>
+          {this.state.notes.map((notes, i) => {
+            if (notes.type === "changelog")
+              return (
+                <div key={i} className="project__change">
+                  {notes.content}
+                </div>
+              );
+            else return null;
+          })}
         </div>
       </div>
     );

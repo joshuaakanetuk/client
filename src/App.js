@@ -6,8 +6,6 @@ import Dashboard from './components/Dashboard/Dashboard.js'
 import Landing from './components/Landing/Landing.js'
 import Signin from './components/SignIn/SignIn'
 
-// import AppContext from './contexts/AppContext.js
-
 function App() {
   return (
     <div className="App">

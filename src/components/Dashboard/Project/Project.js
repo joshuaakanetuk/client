@@ -8,7 +8,7 @@ class Project extends React.Component {
   static contextType = AppContext;
 
   render() {
-    const { match, project } = this.props;
+    const { project } = this.props;
     return (
         <NavLink className="project" to={`/dashboard/projects/` + project.id}>
           <div className="project__name">{project.name}</div>

@@ -5,6 +5,7 @@ const ApiService = {
   getProjects() {
     return fetch(`${config.API_ENDPOINT}/projects`, {
       headers: {
+        'authorization': `bearer ${TokenService.getAuthToken()}`
       },
     })
       .then(res =>
@@ -14,7 +15,6 @@ const ApiService = {
       )
   },
   getProject(id) {
-    console.log(TokenService.getAuthToken())
     return fetch(`${config.API_ENDPOINT}/projects/${id}`, {
       headers: {
         'authorization': `bearer ${TokenService.getAuthToken()}`
@@ -24,6 +24,22 @@ const ApiService = {
         (!res.ok)
           ? res.json().then(e => Promise.reject(e))
           : res.json()
+      )
+  },
+  updateProject(id, project) {
+    return fetch(`${config.API_ENDPOINT}/projects/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(project),
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': `bearer ${TokenService.getAuthToken()}`
+      },
+    })
+      .then(res => 
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          :  ""
+        
       )
   },
   getProjectNotes(projectId) {
@@ -38,10 +54,30 @@ const ApiService = {
           : res.json()
       )
   },
-  deleteNote(projectId) {
+  insertNote(projectId, note) {
+    console.log(note)
     return fetch(`${config.API_ENDPOINT}/projects/${projectId}/notes`, {
-      method: 'delete',
+      method: 'POST',
+      body: JSON.stringify(note),
       headers: {
+        'Content-Type': 'application/json',
+        'authorization': `bearer ${TokenService.getAuthToken()}`
+      },
+    })
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      )
+
+  },
+  deleteNote(projectId, note_id) {
+    console.log(note_id)
+    return fetch(`${config.API_ENDPOINT}/projects/${projectId}/notes`, {
+      method: 'DELETE',
+      body: JSON.stringify(note_id),
+      headers: {
+        'Content-Type': 'application/json',
         'authorization': `bearer ${TokenService.getAuthToken()}`
       },
     })
@@ -52,25 +88,6 @@ const ApiService = {
       )
 
   }
-  // postReview(thingId, text, rating) {
-  //   return fetch(`${config.API_ENDPOINT}/reviews`, {
-  //     method: 'POST',
-  //     headers: {
-  //       'content-type': 'application/json',
-  //       'authorization': `bearer ${TokenService.getAuthToken()}`
-  //     },
-  //     body: JSON.stringify({
-  //       thing_id: thingId,
-  //       rating,
-  //       text,
-  //     }),
-  //   })
-  //     .then(res =>
-  //       (!res.ok)
-  //         ? res.json().then(e => Promise.reject(e))
-  //         : res.json()
-  //     )
-  // }
 }
 
 export default ApiService

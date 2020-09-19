@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { v4 as uuidv4 } from "uuid";
-import serve from "../services/thing-api-service.js"
+import serve from "../services/thing-api-service.js";
+import token from '../services/token'
 
 const AppContext = React.createContext({
   projects: [],
@@ -28,34 +29,50 @@ export class AppProvider extends Component {
   };
 
   componentDidMount() {
-    serve.getProjects()
-      .then(data => {
-        this.setState({
-          projects: data
-        })
-      })
+    // projects 
+    this.setUser()
+
+  }
+
+  getProjects = () => {
+    serve.getProjects().then((data) => {
+      this.setState({
+        projects: data,
+      });
+    });
   }
 
   getNotes(id) {
-    return serve.getProjectNotes(id)
-    .then(data => {
-      return data
-    })
-    .catch(err => console.log(err))
+    return serve
+      .getProjectNotes(id)
+      .then((data) => {
+        return data;
+      })
+      .catch((err) => console.log(err));
   }
 
   getProject(id) {
-    return serve.getProject(id)
-    .then(data => {
-      return data
-    })
+    return serve.getProject(id).then((data) => {
+      return data;
+    });
   }
 
   deleteNote(id) {
-    return serve.deleteNote(id)
-    .then(data => {
+    return serve.deleteNote(id).then((data) => {
       return data;
-    })
+    });
+  }
+
+  setUser() {
+    let user = JSON.parse(token.getUser());
+    
+    if(user) {
+      this.setState({
+        id: user.user_id,
+        typeUser: user.type
+      })
+    }
+    console.log(user)
   }
 
   submitProposal = (project) => {
@@ -117,97 +134,50 @@ export class AppProvider extends Component {
     this.setState({ projects });
   };
 
-  updateApproval = (id, status, feedback) => {
-    console.log(status);
-    // gets current projects
-    let projects = [...this.state.projects];
-    // get project adding/updating to
-    let projectId = projects.filter((project) => project.id === id)[0];
-    // get index for later
-    let projectoo = projects.indexOf(projectId);
-    let newP = { ...projectId };
-
-    if (status === 0) {
-      newP[`client_approval`] = false;
-      newP[`admin_approval`] = false;
-      newP.notes.push({
-        id: projectId.notes.length + 1,
-        content: this.state.typeUser + " has declined.",
-        date: new Date(),
-        type: "changelog",
-      });
-      newP.notes.push({
-        id: projectId.notes.length + 1,
-        content: feedback,
-        date: new Date(),
-        type: "feedback",
-      });
-    } 
-    if (status === 1) {
-      console.log(status, this.state.typeUser)
-      newP[this.state.typeUser + `_approval`] = true;
-      if (feedback) {
-        newP.notes.push({
-          id: projectId.notes.length + 1,
-          content: feedback,
-          date: new Date(),
-          type: "feedback",
-        });
-      }
-      newP.notes.push({
-        id: projectId.notes.length + 1,
-        content: this.state.typeUser + " has approved.",
-        date: new Date(),
-        type: "changelog",
-      });
-      if (newP.client_approval && newP.admin_approval) {
-        newP.status = "DESIGN";
-        newP.notes.push({
-          id: projectId.notes.length + 1,
-          content: "Project has moved to design.",
-          date: new Date(),
-          type: "changelog",
-        });
-        newP.admin_approval = null;
-        newP.client_approval = null;
-      }
-    } 
-    if (status === 2) {
-      newP[`client_approval`] = false;
-      newP[`admin_approval`] = false;
+  updateApproval = (id, meta, content) => {
+    const project = {
+      approval: meta
     }
-
-    projects[projectoo] = newP;
-    this.setState({ projects });
+    return serve.updateProject(id, project)
+    .then((data) => {
+      return data;
+    });
   };
+
+  clearEvery = () => {
+    this.setState({
+      projects: []
+    })
+  }
 
   // notes
   updateNotes = (id, _note, action, type) => {
-    // gets current projects
-    let projects = [...this.state.projects];
-    // get project adding/updating to
-    let projectId = projects.filter((project) => project.id === id)[0];
-    // get index for later
-    let projectoo = projects.indexOf(projectId);
+    const updatedNote = {
+      content: _note,
+      type: type,
+      date_created: new Date(),
+      created_by: "client",
+      project_id: id,
+    };
 
     if (action === "POST") {
-      // push to array
-      projectId.notes.push({
-        id: projectId.notes.length + 1,
-        content: _note,
-        date: new Date(),
-        type: type,
-      });
+      return serve.insertNote(id, updatedNote)
+      .then((data) => {
+        return data;
+      })
+      .catch(err => console.log(err));
     }
 
     if (action === "DELETE") {
-      let updatedNotes = projectId.notes.findIndex((note) => note.id === _note);
-      // push to array
-      projectId.notes.splice(updatedNotes, 1);
+      return serve.deleteNote(id, {_note})
+      .then((data) => {
+        return data;
+      })
+      .catch(err => console.log(err));
     }
 
-    projects[projectoo] = projectId;
-    this.setState({ projects });
+    console.log(id, _note, action, type);
+  
   };
 
   render() {
@@ -220,11 +190,14 @@ export class AppProvider extends Component {
       changeUserType: this.changeUserType,
       getNotes: this.getNotes,
       getProject: this.getProject,
+      getProjects: this.getProjects,
       updateNotes: this.updateNotes,
       deleteNote: this.deleteNote,
       submitProposal: this.submitProposal,
       updateProposal: this.updateProposal,
       updateApproval: this.updateApproval,
+      setUser: this.setUser,
+      clearEvery: this.clearEvery
     };
     return (
       <AppContext.Provider value={value}>

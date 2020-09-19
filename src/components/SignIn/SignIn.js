@@ -1,12 +1,15 @@
 import React from 'react'
 import auth from '../../services/auth'
 import token from '../../services/token';
+import AppContext from '../../contexts/AppContext.js'
 
 
 class SignIn extends React.Component{
+  static contextType = AppContext;
     constructor(props) {
         super(props)
         this.state = {
+            error: '',
             status: 0,
             user_name: "",
             password: "",
@@ -20,16 +23,21 @@ class SignIn extends React.Component{
         ev.preventDefault();
         this.setState({ error: null });
         const { user_name, password } = ev.target;
+
     
         auth.postLogin({
           user_name: user_name.value,
           password: password.value,
         })
           .then((res) => {
+            
             user_name.value = "";
             password.value = "";
             token.saveAuthToken(res.authToken);
-            this.props.onLoginSuccess();
+            token.saveUser(JSON.stringify(res.user))
+            this.props.history.push('/dashboard')
+            // this.context.setUser();
+            
           })
           .catch((res) => {
             this.setState({ error: res.error });
@@ -39,6 +47,7 @@ class SignIn extends React.Component{
     render() {
         return(
             <form onSubmit={this.handleSubmitJwtAuth}>
+                <small>{this.state.error}</small>
                 <label htmlFor="signin">Sign In:</label>
                 <input type="radio" name="signup" id="signin"/><br/>
                 <label htmlFor="signin">Sign Up:</label>
