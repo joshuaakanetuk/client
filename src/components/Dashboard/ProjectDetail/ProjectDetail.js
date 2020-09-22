@@ -52,7 +52,7 @@ class ProjectDetail extends React.Component {
     return (
       <div
         style={{
-          padding: '50px',
+          padding: '25px',
           width: "100%",
           display: "flex",
           flexDirection: "column",
@@ -61,9 +61,6 @@ class ProjectDetail extends React.Component {
         }}
       >
         <div style={{border:"white 1px solid", padding: "6px 8px", borderRadius:"4px"}} onClick={() => history.goBack()}>Back</div>
-        <br />
-        <small style={{ color: "gray" }}>{project.id}</small>
-        <br />
         <small>Status: {project.status}</small>
         {project.admin_approval === true ? (
           <>
@@ -169,9 +166,10 @@ class ProjectDetail extends React.Component {
         <h3>Type: {project.type}</h3>
         <div className="project_deliverables">
             <h3>Deliverables:</h3>
-          {/* {project.deliverables[""].map((deliver) => {
-            return <div>{deliver.emoji}: {deliver.name}</div>;
-          })} */}
+            {project.deliverables.length > 0 ? 
+            project.deliverables.split(',').map((deliver) => {
+              return <li>{deliver}</li>;
+            }) : ''}
         </div>
         <div className="project__notes">
           <span>Notes:</span>

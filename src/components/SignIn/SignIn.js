@@ -2,6 +2,7 @@ import React from 'react'
 import auth from '../../services/auth'
 import token from '../../services/token';
 import AppContext from '../../contexts/AppContext.js'
+import MsgBox from '../MsgBox/MsgBox'
 
 
 class SignIn extends React.Component{
@@ -36,8 +37,6 @@ class SignIn extends React.Component{
             token.saveAuthToken(res.authToken);
             token.saveUser(JSON.stringify(res.user))
             this.props.history.push('/dashboard')
-            // this.context.setUser();
-            
           })
           .catch((res) => {
             this.setState({ error: res.error });
@@ -46,6 +45,8 @@ class SignIn extends React.Component{
 
     render() {
         return(
+          <>
+          <MsgBox msg="admin: admin\n password: passwOrd1@"/>
             <form onSubmit={this.handleSubmitJwtAuth}>
                 <small>{this.state.error}</small>
                 <label htmlFor="signin">Sign In:</label>
@@ -65,6 +66,7 @@ class SignIn extends React.Component{
                 <input type="email" name="email" id="email" /><br></br>
                 <input type="submit" value="Submit"></input>
             </form>
+            </>
         );
     }
 }

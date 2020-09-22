@@ -11,7 +11,7 @@ function App() {
     <div className="App">
       <Nav/>
         <Route exact path="/" component={Landing}/>
-        <Route path="/signin" component={Signin}/>
+        <Route path="/login" component={Signin}/>
         <Route path="/dashboard" component={Dashboard}/>
     </div>
   );

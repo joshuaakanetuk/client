@@ -12,6 +12,7 @@ class Dashboard extends React.Component {
   static contextType = AppContext;
 
   componentDidMount() {
+    this.context.setUser();
     this.context.getProjects();
   }
 

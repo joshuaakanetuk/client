@@ -63,7 +63,7 @@ export class AppProvider extends Component {
     });
   }
 
-  setUser() {
+  setUser = () => {
     let user = JSON.parse(token.getUser());
     
     if(user) {
@@ -72,41 +72,21 @@ export class AppProvider extends Component {
         typeUser: user.type
       })
     }
-    console.log(user)
   }
 
-  submitProposal = (project) => {
-    console.log(project);
-    const { name, type, deliverables, cost, notes } = project;
-    let newProject = {
-      id: uuidv4(),
-      name: name,
-      status: "INITIAL",
-      client_id: this.state.id,
-      client_approval: true,
-      admin_approval: false,
-      timeframe: new Date(),
-      notes: [
-        {
-          id: 1,
-          content: "Project has moved to initial.",
-          date: new Date(),
-          type: "changelog",
-        },
-        {
-          id: 2,
-          content: notes,
-          date: new Date(),
-          type: "changelog",
-        },
-      ],
-      type: type,
-      date_proposed: new Date(),
-      date_modified: new Date(),
-      price: cost,
-      deliverables: deliverables,
-    };
-    this.setState({ projects: [...this.state.projects, newProject] });
+  submitProposal = (project, note) => {
+    return serve.insertProject(project)
+    .then((data) => {
+      this.setState({
+        projects: [...this.state.projects, data]
+      })
+      return data;
+    })
+    .then(data => {
+      this.updateNotes(data.id, note, 'POST', 'notes')
+    })
+    .catch(err => console.log(err));
+    
   };
 
   //  Demo exclusive functions
@@ -138,6 +118,7 @@ export class AppProvider extends Component {
     const project = {
       approval: meta
     }
+    console.log(project)
     return serve.updateProject(id, project)
     .then((data) => {
       return data;

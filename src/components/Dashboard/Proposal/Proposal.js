@@ -54,123 +54,160 @@ class Proposal extends React.Component {
     name: "",
     type: "",
     deliverables: [],
+    deliverArr: [],
     cost: 0,
-    notes: ''
+    notes: "",
+  };
+  selected = (e) => {
+    const deliverArr = this.state.deliverArr;
+    let index;
+    let newCost = 0;
+
+    if (
+      this.state.deliverables.indexOf(Number(e.currentTarget.dataset.key)) ===
+      -1
+    ) {
+      this.setState({
+        deliverables: [
+          ...this.state.deliverables,
+          Number(e.currentTarget.dataset.key),
+        ],
+      });
+      deliverArr.push(deliverablesTypes[Number(e.currentTarget.dataset.key)]);
+    } else {
+      this.setState({
+        deliverables: this.state.deliverables.filter(
+          (del) => del !== Number(e.currentTarget.dataset.key)
+        ),
+      });
+      index = deliverArr.indexOf(
+        deliverablesTypes[Number(e.currentTarget.dataset.key)]
+      );
+      deliverArr.splice(index, 1);
+    }
+
+    this.state.deliverArr.forEach((element) => {
+      newCost = newCost + element.cost;
+    });
+
+    this.setState({
+      cost: newCost,
+    });
   };
   handleChangeString = (element, value) => {
     this.setState({ [value.target.name]: value.target.value });
   };
-  handleDeliver = (e) => {
-    const deliverables = this.state.deliverables;
-    let index;
-    let newCost = 0;
-    // check if the check box is checked or unchecked
-    if (e.target.checked) {
-        // add the numerical value of the checkbox to options array
-        deliverables.push(deliverablesTypes[e.target.value])
-      } else {
-        // or remove the value from the unchecked checkbox from the array
-        index = deliverables.indexOf(deliverablesTypes[e.target.value])
-        deliverables.splice(index, 1)
-      }
-  
-
-    this.setState({
-      deliverables: deliverables
-    });
-    
-    this.state.deliverables.forEach((element) => {
-        newCost = newCost + element.cost;
-    });
-
-    this.setState({
-        cost: newCost
-    })
-  };
+  handleDeliver = (e) => {};
   render() {
+    // document.title = "Proposal"
     return (
       <>
-        <Permission override={true}>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              this.context.submitProposal(this.state);
-              this.props.history.push("/dashboard/projects");
-              alert('Submitted proposal successfully!')
-            }}
-          >
-            <h1>Create Proposal</h1>
-            <h2>Name of Project</h2>
-            <input
-              required
-              type="text"
-              name="name"
-              onChange={(e) => this.handleChangeString("name", e)}
-            />
-            <h2>Type of Project</h2>
-            {/* quick idea draft */}
-            {/* <div className="project___proposal typelist">
-                    {types.map(type => {
-                        return(
-                            <div className="typeoption">
-                                <div>{type}</div>
-                            </div>
-                        )
-                    })}
+        {/* <Permission override={true}> */}
+        <form
+          style={{
+            width: "80%",
+          }}
+          onSubmit={(e) => {
+            e.preventDefault();
+            // FETCH GOES HERE {}
 
-                </div> */}
-            <div className="">
-              {types.map((type) => {
-                return (
-                  <>
-                    <label>{type}</label>
-                    <input
-                      required
-                      type="radio"
-                      name="type"
-                      onChange={(e) => this.handleChangeString("name", e)}
-                      value={type}
-                    />
-                    <br />
-                  </>
-                );
-              })}
-            </div>
-            <h2>Deliverables</h2>
+            const project = {
+              name: this.state.name,
+              type: this.state.type,
+              status: "INITIAL",
+              admin_approval: false,
+              client_approval: true,
+              end_timeframe: new Date(),
+              price: this.state.cost,
+              proposal: null,
+              date_created: new Date(),
+              date_modified: new Date(),
+              user_id: null,
+              deliverables: this.state.deliverArr
+                .map((del) => del.name)
+                .toString(),
+            };
+
+            this.context
+              .submitProposal(project, this.state.notes)
+              .then((data) => {
+                this.props.history.push("/dashboard");
+                alert("Submitted proposal successfully!");
+              })
+              .catch((err) => console.log());
+          }}
+        >
+          <h1>Create Proposal</h1>
+          <h2>Name of Project</h2>
+          <input
+            id="project__name"
+            required
+            type="text"
+            name="name"
+            onChange={(e) => this.handleChangeString("name", e)}
+          />
+          <h2>Type of Project</h2>
+          <div className="">
+            {types.map((type) => {
+              return (
+                <>
+                  <label>{type}</label>
+                  <input
+                    required
+                    type="radio"
+                    name="type"
+                    onChange={(e) => this.handleChangeString("name", e)}
+                    value={type}
+                  />
+                  <br />
+                </>
+              );
+            })}
+          </div>
+          <h2>Deliverables</h2>
+          <div>
             <div className="project___proposal deliver">
               {deliverablesTypes.map((deliver, i) => {
                 return (
-                  <div className="">
+                  <div
+                    data-key={i}
+                    className={
+                      this.state.deliverables.indexOf(i) !== -1
+                        ? "delblock delblock__selected"
+                        : "delblock"
+                    }
+                    onClick={(e) => this.selected(e)}
+                  >
                     <span>
                       {deliver.emoji} — {deliver.name}
                     </span>
-                    <input
-                      type="checkbox"
-                      name="getChecked"
-                      onChange={(e) => this.handleDeliver(e)}
-                      value={i}
-                      id="r1"
-                    ></input>
                   </div>
                 );
               })}
             </div>
-            <br />
-            <div>
-                <label>Notes for Freelancer:</label><br />
-                <textarea name="notes" onChange={(e) => {this.handleChangeString('notes', e)}} />
-                </div> 
+          </div>
+          <div>
+            <label>Notes for Freelancer:</label>
             <br />
             <br />
-            <span>
-              <span aria-label="money" role="img">
-                💸
-              </span>{" "}
-              Estimated cost: ${this.state.cost} USD
-            </span>
-            <input type="submit" />
-          </form>
-        </Permission>
+            <textarea
+              name="notes"
+              onChange={(e) => {
+                this.handleChangeString("notes", e);
+              }}
+            />
+          </div>
+          <br />
+          <br />
+          <h1>
+            <span aria-label="money" role="img">
+              💸
+            </span>{" "}
+            Estimated cost: ${this.state.cost} USD
+          </h1>
+          <input type="submit" />
+        </form>
+        {/* </Permission> */}
         <Permission>
           You are an admin and don't need to submit proposals to yourself!
         </Permission>

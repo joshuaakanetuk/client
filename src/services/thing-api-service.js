@@ -26,6 +26,22 @@ const ApiService = {
           : res.json()
       )
   },
+  insertProject(project) {
+    console.log(project)
+    return fetch(`${config.API_ENDPOINT}/projects`, {
+      method: 'POST',
+      body: JSON.stringify(project),
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': `bearer ${TokenService.getAuthToken()}`
+      },
+    })
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      )
+  },
   updateProject(id, project) {
     return fetch(`${config.API_ENDPOINT}/projects/${id}`, {
       method: 'PATCH',

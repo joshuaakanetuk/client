@@ -10,9 +10,12 @@ class Nav extends React.Component {
     const { location } = this.props;
     const landingNav = (
       <nav>
-        <span className="logo">Unknown Labs</span>
+        <span onClick={() => {
+            this.props.history.push("/");
+          }}
+          className="logo">Unknown Labs</span>
         <div className="links">
-          <Link to="/signin">Sign In / Sign Up</Link>
+          <Link to="/login">Sign In / Sign Up</Link>
           <Link to="/dashboard">Dashboard</Link>
         </div>
       </nav>
@@ -20,8 +23,16 @@ class Nav extends React.Component {
 
     const dashboardNav = (
       <nav>
-        {/* <Link to="/">Leave App </Link> */}
-        <div
+        <span onClick={() => {
+            this.props.history.push("/");
+          }}
+          className="logo">Unknown Labs</span>
+        <div className="links">
+        <Link to="/dashboard">Home</Link>
+        <Permission>
+          <Link to="/dashboard/clients">Clients</Link>
+        </Permission>
+        <Link to=""
           onClick={() => {
             token.clearAuthToken();
             token.clearUser();
@@ -30,18 +41,8 @@ class Nav extends React.Component {
           }}
         >
           Leave App
+        </Link>
         </div>
-        <Link to="/dashboard">Home</Link>
-        {/* <Link to="/dashboard/projects">Projects</Link> */}
-        <Permission>
-          <Link to="/dashboard/clients">Clients</Link>
-        </Permission>
-        {/* <Link to="/dashboard/chat" className="disabled-link">
-          Chat
-        </Link> */}
-        {/* <div className="avatar">
-        {this.context.typeUser.toUpperCase()[0]}
-        </div> */}
       </nav>
     );
 
