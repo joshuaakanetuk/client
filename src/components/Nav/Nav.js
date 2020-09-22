@@ -15,7 +15,8 @@ class Nav extends React.Component {
           }}
           className="logo">Unknown Labs</span>
         <div className="links">
-          <Link to="/login">Sign In / Sign Up</Link>
+          {token.getAuthToken() ? '' : <Link to="/login">Login</Link>}
+    
           <Link to="/dashboard">Dashboard</Link>
         </div>
       </nav>
@@ -27,11 +28,7 @@ class Nav extends React.Component {
             this.props.history.push("/");
           }}
           className="logo">Unknown Labs</span>
-        <div className="links">
-        <Link to="/dashboard">Home</Link>
-        <Permission>
-          <Link to="/dashboard/clients">Clients</Link>
-        </Permission>
+        <div className="links">   
         <Link to=""
           onClick={() => {
             token.clearAuthToken();
@@ -40,8 +37,9 @@ class Nav extends React.Component {
             this.props.history.push("/");
           }}
         >
-          Leave App
+          Logout
         </Link>
+        <Link to="/dashboard">Dashboard</Link>
         </div>
       </nav>
     );

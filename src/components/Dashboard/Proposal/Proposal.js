@@ -205,7 +205,7 @@ class Proposal extends React.Component {
             </span>{" "}
             Estimated cost: ${this.state.cost} USD
           </h1>
-          <input type="submit" />
+          <input className="button" type="submit" />
         </form>
         {/* </Permission> */}
         <Permission>

@@ -11,14 +11,14 @@ body,
   color: white;
   font-weight: 600;
   width: 100%;
-  height: auto;
+  height: calc(100vh - 75px);
 }
 
 main {
   display: flex;
   justify-content: center;
   align-self: center;
-  min-height: calc(100vh - 70px);
+  min-height: calc(100vh - 75px);
   display: -ms-flexbox;
   display: flex;
   -ms-flex-direction: column;
@@ -64,12 +64,13 @@ nav {
 }
 
 .logo {
-  font-size: 25px;
+  font-size: 4vmin;
   text-align: left;
   margin-right: auto;
   font-weight: 700;
   justify-content: start;
   flex: 3 1 0;
+  cursor: pointer;
 }
 
 .links {
@@ -81,6 +82,11 @@ nav {
 .links a {
   margin-right: 24px;
   position: relative;
+  border: 1px solid white;
+  padding: 10px 12px;
+  border-radius: 4px;
+  height: 40px;
+  vertical-align: middle;
 }
 
 p {
@@ -94,31 +100,34 @@ p {
 }
 
 .dashboard {
-  height: 100%;
+  height: auto;
   width: 100%;
   display: flex;
+  margin-bottom: 40px;
   justify-content: center;
   flex-direction: column;
   align-items: center;
 }
-
-.eighty {
-  width: 80%;
-}
-
 .msgbox__shell {
     background: #5555ff;
     padding: 40px 24px;
     border-radius: 4px;
     margin: 15px 0;
-    width: 80%;
+    width: 90%;
     color: white;
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .copyBox {
+      display: flex;
+      flex-direction: column;
   }
   
 
 .project,
 .proposal__link {
-  width: 80%;
+  width: 90%;
   color: white;
   border-radius: 4px;
   background-color: #202020;
@@ -198,14 +207,14 @@ iframe {
 
 
 .project__notes {
-  width: 80%;
+  width: 90%;
 }
 
 .project__changelog {
-  width: 80%;
+  width: 90%;
 }
 
-input[type="text"] {
+input[type="text"], input[type="password"], input[type="email"] {
   font-family: "Rubik", sans-serif;
   resize: none;
   overflow: hidden;
@@ -245,7 +254,7 @@ textarea:focus {
   border: 1px solid #4c9aff;
 }
 
-button {
+button, .button {
   background: none;
   background-clip: padding-box;
   border: 1px solid white;
@@ -309,6 +318,16 @@ button {
   background: #5555ff;
 }
 
+#login {
+    padding: 20px 15px;
+    border: 1px white solid;
+    text-align: left;
+}
+
+#login input[type="text"], input[type="password"], input[type="email"] {
+    margin: 20px 0px;
+}
+
 
 .intercom-lightweight-app-launcher-icon {
     display: flex;
@@ -323,6 +342,13 @@ button {
 }
 
 @media all and (max-width: 600px) {
+    .msgbox__shell {
+        flex-direction: column;
+        padding: 20px 12px;
+    }
+    .copyBox {
+        margin-bottom: 24px;
+    }
     .delblock {
         width: calc(50% - 16px);
       }

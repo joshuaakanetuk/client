@@ -1,74 +1,135 @@
-import React from 'react'
-import auth from '../../services/auth'
-import token from '../../services/token';
-import AppContext from '../../contexts/AppContext.js'
-import MsgBox from '../MsgBox/MsgBox'
+import React from "react";
+import auth from "../../services/auth";
+import token from "../../services/token";
+import AppContext from "../../contexts/AppContext.js";
+import MsgBox from "../MsgBox/MsgBox";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
-
-class SignIn extends React.Component{
+class SignIn extends React.Component {
   static contextType = AppContext;
-    constructor(props) {
-        super(props)
-        this.state = {
-            error: '',
-            status: 0,
-            user_name: "",
-            password: "",
-            email: "",
-            type: '',
-            full_name: ''
-        }
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      error: "",
+      status: 0,
+      user_name: "",
+      password: "",
+      email: "",
+      type: "",
+      full_name: "",
+      loginStatus: "signin",
+    };
+  }
 
-    handleSubmitJwtAuth = (ev) => {
-        ev.preventDefault();
-        this.setState({ error: null });
-        const { user_name, password } = ev.target;
+  handleCheck = (e) => {
+    this.setState({
+      loginStatus: e.currentTarget.id,
+    });
+  };
 
-    
-        auth.postLogin({
-          user_name: user_name.value,
-          password: password.value,
-        })
-          .then((res) => {
-            
-            user_name.value = "";
-            password.value = "";
-            token.saveAuthToken(res.authToken);
-            token.saveUser(JSON.stringify(res.user))
-            this.props.history.push('/dashboard')
-          })
-          .catch((res) => {
-            this.setState({ error: res.error });
-          });
-      };
+  handleSubmitJwtAuth = (ev) => {
+    ev.preventDefault();
+    this.setState({ error: null });
+    const { user_name, password } = ev.target;
 
-    render() {
-        return(
-          <>
-          <MsgBox msg="admin: admin\n password: passwOrd1@"/>
-            <form onSubmit={this.handleSubmitJwtAuth}>
-                <small>{this.state.error}</small>
-                <label htmlFor="signin">Sign In:</label>
-                <input type="radio" name="signup" id="signin"/><br/>
-                <label htmlFor="signin">Sign Up:</label>
-                <input type="radio" name="signup" id="signup"/><br/>
+    auth
+      .postLogin({
+        user_name: user_name.value,
+        password: password.value,
+      })
+      .then((res) => {
+        user_name.value = "";
+        password.value = "";
+        token.saveAuthToken(res.authToken);
+        token.saveUser(JSON.stringify(res.user));
+        this.props.history.push("/dashboard");
+      })
+      .catch((res) => {
+        this.setState({ error: res.error });
+      });
+  };
 
+  render() {
+    const copy = (
+      <>
+        <div className="copyBox">
+          <span className="loginCopy">User: admin</span>
+          <CopyToClipboard text={"passwOrd1@"}>
+            <button>Click here for password for admin.</button>
+          </CopyToClipboard>
+        </div>
+        <div className="copyBox">
+          <span className="loginCopy">User: client</span>
+          <CopyToClipboard text={"passwOrd1@"}>
+            <button>Click here for password for client.</button>
+          </CopyToClipboard>
+        </div>
+      </>
+    );
 
-                <label htmlFor="user_name">Username:</label>
-                <input type="text" name="user_name" id="user_name" /><br/>
-                <label htmlFor="password">Password:</label>
-                <input type="password" name="password" id="password"  /><br/>
-                <span>IF SIGN UP</span><br/>
-                <label htmlFor="full_name">Name of Brand:</label>
-                <input type="full_name" name="full_name" id="full_name"  /><br/>
-                <label htmlFor="email">Email:</label>
-                <input type="email" name="email" id="email" /><br></br>
-                <input type="submit" value="Submit"></input>
-            </form>
+    return (
+      <div className="dashboard">
+        <MsgBox msg={copy} />
+        <form id="login" onSubmit={this.handleSubmitJwtAuth}>
+          <small>{this.state.error}</small><br></br>
+          {this.state.loginStatus === "signin" ? (
+            <>
+              <label htmlFor="user_name">Username:</label>
+              <input type="text" name="user_name" id="user_name" />
+              <br />
+              <label htmlFor="password">Password:</label>
+              <input type="password" name="password" id="password" />
+              <br />
             </>
-        );
-    }
+          ) : (
+            <>
+              <label htmlFor="user_name">Username:</label>
+              <input type="text" name="user_name" id="user_name" />
+              <br />
+              <label htmlFor="password">Password:</label>
+              <input type="password" name="password" id="password" />
+              <br />
+              <label htmlFor="full_name">Name of Brand:</label>
+              <input type="text" name="full_name" id="full_name" />
+              <br />
+              <label htmlFor="email">Email:</label>
+              <input type="email" name="email" id="email" />
+              <br></br>
+            </>
+          )}
+          <div
+            style={{
+              display: "flex",
+              width: "100%",
+              justifyContent: "space-around",
+              margin: "20px 0",
+            }}
+          >
+            <div>
+              <label htmlFor="signin">Sign In:</label>
+              <input
+                type="radio"
+                onChange={this.handleCheck}
+                defaultChecked={this.state.loginStatus === "signin"}
+                name="signup"
+                id="signin"
+              />
+            </div>
+            <div>
+              <label htmlFor="signin">Sign Up:</label>
+              <input
+                type="radio"
+                onChange={this.handleCheck}
+                name="signup"
+                id="signup"
+              />
+            </div>
+          </div>
+          <input className="button" type="submit" value="Submit"></input>
+        </form>
+      </div>
+    );
+  }
 }
 
 export default SignIn;
