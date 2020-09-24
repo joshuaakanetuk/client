@@ -57,7 +57,16 @@ class Proposal extends React.Component {
     deliverArr: [],
     cost: 0,
     notes: "",
+    typeSelected: ''
   };
+  typeSelect = (e) => {
+    this.setState({
+      typeSelected: 
+        Number(e.currentTarget.dataset.key)
+      ,
+    });
+
+  }
   selected = (e) => {
     const deliverArr = this.state.deliverArr;
     let index;
@@ -110,10 +119,9 @@ class Proposal extends React.Component {
           onSubmit={(e) => {
             e.preventDefault();
             // FETCH GOES HERE {}
-
             const project = {
               name: this.state.name,
-              type: this.state.type,
+              type: types[this.state.typeSelected],
               status: "INITIAL",
               admin_approval: false,
               client_approval: true,
@@ -147,20 +155,23 @@ class Proposal extends React.Component {
             onChange={(e) => this.handleChangeString("name", e)}
           />
           <h2>Type of Project</h2>
-          <div className="">
-            {types.map((type) => {
+          <div className="types">
+            {types.map((type, i) => {
               return (
-                <>
-                  <label>{type}</label>
-                  <input
-                    required
-                    type="radio"
-                    name="type"
-                    onChange={(e) => this.handleChangeString("name", e)}
-                    value={type}
-                  />
-                  <br />
-                </>
+                <div
+                    key={i}
+                    data-key={i}
+                    className={
+                      this.state.typeSelected === i
+                        ? "typeblock typeblock__selected"
+                        : "typeblock"
+                    }
+                    onClick={(e) => this.typeSelect(e)}
+                  >
+                    <span>
+                      {type}
+                    </span>
+                  </div>
               );
             })}
           </div>
@@ -170,6 +181,7 @@ class Proposal extends React.Component {
               {deliverablesTypes.map((deliver, i) => {
                 return (
                   <div
+                    key={i}
                     data-key={i}
                     className={
                       this.state.deliverables.indexOf(i) !== -1

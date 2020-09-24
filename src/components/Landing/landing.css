@@ -6,7 +6,8 @@ html,
 body,
 #root,
 .App {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   background-color: #141414;
   color: white;
   font-weight: 600;
@@ -109,21 +110,20 @@ p {
   align-items: center;
 }
 .msgbox__shell {
-    background: #5555ff;
-    padding: 40px 24px;
-    border-radius: 4px;
-    margin: 15px 0;
-    width: 90%;
-    color: white;
-    display: flex;
-    justify-content: space-around;
-  }
+  background: #5555ff;
+  padding: 40px 24px;
+  border-radius: 4px;
+  margin: 15px 0;
+  width: 90%;
+  color: white;
+  display: flex;
+  justify-content: space-around;
+}
 
-  .copyBox {
-      display: flex;
-      flex-direction: column;
-  }
-  
+.copyBox {
+  display: flex;
+  flex-direction: column;
+}
 
 .project,
 .proposal__link {
@@ -164,11 +164,12 @@ p {
 
 .proposal__link {
   border-radius: 50%;
-  width: 115px;
-  height: 115px;
+  width: 60px;
+  height: 60px;
   position: fixed;
   bottom: 20px;
   right: 20px;
+  box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.06), 0 2px 32px 0 rgba(0, 0, 0, 0.16);
 }
 
 .typelist {
@@ -205,7 +206,6 @@ iframe {
   height: 35px;
 }
 
-
 .project__notes {
   width: 90%;
 }
@@ -214,7 +214,9 @@ iframe {
   width: 90%;
 }
 
-input[type="text"], input[type="password"], input[type="email"] {
+input[type="text"],
+input[type="password"],
+input[type="email"] {
   font-family: "Rubik", sans-serif;
   resize: none;
   overflow: hidden;
@@ -229,10 +231,10 @@ input[type="text"], input[type="password"], input[type="email"] {
 }
 
 #project__name {
-    height: 72px;
-    font-size: 42px;
-    font-weight: 800;
-    color: white;
+  height: 72px;
+  font-size: 42px;
+  font-weight: 800;
+  color: white;
 }
 
 textarea {
@@ -254,7 +256,8 @@ textarea:focus {
   border: 1px solid #4c9aff;
 }
 
-button, .button {
+button,
+.button {
   background: none;
   background-clip: padding-box;
   border: 1px solid white;
@@ -286,7 +289,8 @@ button, .button {
   -webkit-font-smoothing: antialiased;
 }
 
-.deliver {
+.deliver,
+.types {
   /* height: 500px; */
   display: flex;
   flex-wrap: wrap;
@@ -296,7 +300,12 @@ button, .button {
   margin-bottom: 24px;
 }
 
-.delblock {
+.types {
+  flex-wrap: nowrap;
+}
+
+.delblock,
+.typeblock {
   height: 120px;
   width: calc(33% - 15px);
   /* display: inline-block; */
@@ -310,46 +319,60 @@ button, .button {
   transition: all 275ms;
 }
 
-.delblock {
+.typeblock {
+  width: calc(50% - 15px);
+}
+
+.delblock,
+.typeblock {
   background: #202020;
 }
 
-.delblock__selected {
+.delblock__selected,
+.typeblock__selected {
   background: #5555ff;
 }
 
 #login {
-    padding: 20px 15px;
-    border: 1px white solid;
-    text-align: left;
+  padding: 20px 15px;
+  border: 1px white solid;
+  text-align: left;
 }
 
-#login input[type="text"], input[type="password"], input[type="email"] {
-    margin: 20px 0px;
+#login input[type="text"],
+input[type="password"],
+input[type="email"] {
+  margin: 20px 0px;
 }
-
 
 .intercom-lightweight-app-launcher-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 60px;
-    height: 60px;
-    transition: transform 100ms linear, opacity 80ms linear;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 60px;
+  height: 60px;
+  transition: transform 100ms linear, opacity 80ms linear;
 }
 
 @media all and (max-width: 600px) {
-    .msgbox__shell {
-        flex-direction: column;
-        padding: 20px 12px;
-    }
-    .copyBox {
-        margin-bottom: 24px;
-    }
-    .delblock {
-        width: calc(50% - 16px);
-      }
+  .msgbox__shell {
+    flex-direction: column;
+    padding: 20px 12px;
+  }
+  .copyBox {
+    margin-bottom: 24px;
+  }
+  .delblock {
+    width: calc(50% - 16px);
+  }
+  .types {
+    flex-wrap: wrap!important;
+  }
+  .typeblock {
+    width: calc(50% - 16px);
+    
+  }
 }

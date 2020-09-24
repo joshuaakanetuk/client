@@ -88,7 +88,6 @@ const ApiService = {
 
   },
   deleteNote(projectId, note_id) {
-    console.log(note_id)
     return fetch(`${config.API_ENDPOINT}/projects/${projectId}/notes`, {
       method: 'DELETE',
       body: JSON.stringify(note_id),
@@ -100,7 +99,7 @@ const ApiService = {
       .then(res =>
         (!res.ok)
           ? res.json().then(e => Promise.reject(e))
-          : res.json()
+          : res
       )
 
   }

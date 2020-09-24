@@ -10,6 +10,7 @@ class SignIn extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      wasCopied: "",
       error: "",
       status: 0,
       user_name: "",
@@ -17,9 +18,19 @@ class SignIn extends React.Component {
       email: "",
       type: "",
       full_name: "",
-      loginStatus: "signin",
+      loginStatus: this.props.match.path,
     };
   }
+
+  componentDidMount = () => {
+    this.context.clearEvery();
+  };
+
+  clearMessages = () => {
+    this.setState({
+      wasCopied: "",
+    });
+  };
 
   handleCheck = (e) => {
     this.setState({
@@ -30,23 +41,46 @@ class SignIn extends React.Component {
   handleSubmitJwtAuth = (ev) => {
     ev.preventDefault();
     this.setState({ error: null });
-    const { user_name, password } = ev.target;
+    const { user_name, password, full_name, email } = ev.target;
 
-    auth
-      .postLogin({
-        user_name: user_name.value,
-        password: password.value,
-      })
-      .then((res) => {
-        user_name.value = "";
-        password.value = "";
-        token.saveAuthToken(res.authToken);
-        token.saveUser(JSON.stringify(res.user));
-        this.props.history.push("/dashboard");
-      })
-      .catch((res) => {
-        this.setState({ error: res.error });
-      });
+    if (this.state.loginStatus === "/signin") {
+      auth
+        .postLogin({
+          user_name: user_name.value,
+          password: password.value,
+        })
+        .then((res) => {
+          user_name.value = "";
+          password.value = "";
+          token.saveAuthToken(res.authToken);
+          token.saveUser(JSON.stringify(res.user));
+          this.props.history.push("/dashboard");
+        })
+        .catch((res) => {
+          this.setState({ error: res.error });
+        });
+    }
+    else {
+      auth
+        .postUser({
+          user_name: user_name.value,
+          password: password.value,
+          full_name: full_name.value,
+          email: email.value,
+          type: 'client'
+        })
+        .then((res) => {
+          user_name.value = "";
+          password.value = "";
+          full_name.value = "";
+          email.value = "";
+          this.setState({wasCopied: "Registration complete."})
+        })
+        .catch((res) => {
+          this.setState({ error: res.error });
+        });
+
+    }
   };
 
   render() {
@@ -54,13 +88,23 @@ class SignIn extends React.Component {
       <>
         <div className="copyBox">
           <span className="loginCopy">User: admin</span>
-          <CopyToClipboard text={"passwOrd1@"}>
+          <CopyToClipboard
+            onCopy={() =>
+              this.setState({ wasCopied: "Admin password was copied." })
+            }
+            text={"passwOrd1@"}
+          >
             <button>Click here for password for admin.</button>
           </CopyToClipboard>
         </div>
         <div className="copyBox">
           <span className="loginCopy">User: client</span>
-          <CopyToClipboard text={"passwOrd1@"}>
+          <CopyToClipboard
+            onCopy={() =>
+              this.setState({ wasCopied: "Client password was copied." })
+            }
+            text={"passwOrd1@"}
+          >
             <button>Click here for password for client.</button>
           </CopyToClipboard>
         </div>
@@ -69,31 +113,63 @@ class SignIn extends React.Component {
 
     return (
       <div className="dashboard">
+        {this.state.wasCopied}
         <MsgBox msg={copy} />
         <form id="login" onSubmit={this.handleSubmitJwtAuth}>
-          <small>{this.state.error}</small><br></br>
-          {this.state.loginStatus === "signin" ? (
+          <small>{this.state.error}</small>
+          <br></br>
+          {this.state.loginStatus === "/signin" ? (
             <>
               <label htmlFor="user_name">Username:</label>
-              <input type="text" name="user_name" id="user_name" />
+              <input
+                type="text"
+                onFocus={this.clearMessages}
+                name="user_name"
+                id="user_name"
+              />
               <br />
               <label htmlFor="password">Password:</label>
-              <input type="password" name="password" id="password" />
+              <input
+                type="password"
+                onFocus={this.clearMessages}
+                name="password"
+                id="password"
+              />
               <br />
             </>
           ) : (
             <>
               <label htmlFor="user_name">Username:</label>
-              <input type="text" name="user_name" id="user_name" />
+              <input
+                type="text"
+                onFocus={this.clearMessages}
+                name="user_name"
+                id="user_name"
+              />
               <br />
               <label htmlFor="password">Password:</label>
-              <input type="password" name="password" id="password" />
+              <input
+                type="password"
+                onFocus={this.clearMessages}
+                name="password"
+                id="password"
+              />
               <br />
               <label htmlFor="full_name">Name of Brand:</label>
-              <input type="text" name="full_name" id="full_name" />
+              <input
+                type="text"
+                onFocus={this.clearMessages}
+                name="full_name"
+                id="full_name"
+              />
               <br />
               <label htmlFor="email">Email:</label>
-              <input type="email" name="email" id="email" />
+              <input
+                type="email"
+                onFocus={this.clearMessages}
+                name="email"
+                id="email"
+              />
               <br></br>
             </>
           )}
@@ -110,18 +186,19 @@ class SignIn extends React.Component {
               <input
                 type="radio"
                 onChange={this.handleCheck}
-                defaultChecked={this.state.loginStatus === "signin"}
+                defaultChecked={this.state.loginStatus === "/signin"}
                 name="signup"
-                id="signin"
+                id="/signin"
               />
             </div>
             <div>
               <label htmlFor="signin">Sign Up:</label>
               <input
                 type="radio"
+                defaultChecked={this.state.loginStatus === "/signup"}
                 onChange={this.handleCheck}
                 name="signup"
-                id="signup"
+                id="/signup"
               />
             </div>
           </div>

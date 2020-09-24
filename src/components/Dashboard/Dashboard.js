@@ -5,19 +5,15 @@ import ProjectList from "./ProjectList/ProjectList";
 import ProjectDetail from "./ProjectDetail/ProjectDetail";
 import AppContext from "../../contexts/AppContext";
 import Permission from "../Permission/Permission";
-import MsgBox from "../MsgBox/MsgBox"
-
+import MsgBox from "../MsgBox/MsgBox";
+import { Plus } from "react-feather";
 
 class Dashboard extends React.Component {
   static contextType = AppContext;
 
   componentDidMount() {
     this.context.setUser();
-    this.context.getProjects();
-  }
-
-  static getDerivedStateFromError(err) {
-    console.log(err, "err")
+    this.context.getProjects()
   }
 
   render() {
@@ -31,7 +27,7 @@ class Dashboard extends React.Component {
             render={(props) => {
               return (
                 <>
-                <MsgBox/>
+                  <MsgBox />
                   <ProjectList projects={this.context.projects} />
                   <Permission override={true}>
                     <div
@@ -40,7 +36,7 @@ class Dashboard extends React.Component {
                       }
                       className="proposal__link"
                     >
-                      <div>Submit Proposal For New Project</div>
+                      <div><Plus/></div>
                     </div>
                   </Permission>
                 </>

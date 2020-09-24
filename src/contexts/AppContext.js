@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { v4 as uuidv4 } from "uuid";
 import serve from "../services/thing-api-service.js";
 import token from '../services/token'
 
@@ -18,27 +17,35 @@ const AppContext = React.createContext({
   updateProposal: () => {},
 });
 
-export default AppContext;
+export default (AppContext);
 
 export class AppProvider extends Component {
   state = {
     typeUser: "client",
     projects: [],
-    error: null,
+    error: false,
     id: 1,
   };
 
   componentDidMount() {
+    console.log(this.props)
     // projects 
     this.setUser()
-
   }
 
   getProjects = () => {
-    serve.getProjects().then((data) => {
+    serve.getProjects()
+    .then((data) => {
       this.setState({
         projects: data,
       });
+    })
+    .catch(err => {
+      token.clearAuthToken()
+      token.clearUser()
+      this.setState({
+      error: true
+      })
     });
   }
 
@@ -83,18 +90,11 @@ export class AppProvider extends Component {
       return data;
     })
     .then(data => {
-      this.updateNotes(data.id, note, 'POST', 'notes')
+        this.updateNotes(data.id, note, 'POST', 'notes')
     })
     .catch(err => console.log(err));
     
   };
-
-  //  Demo exclusive functions
-  // changeUserType = () => {
-  //   const newUserType = this.state.typeUser === "client" ? "admin" : "client";
-  //   this.setState({ typeUser: newUserType });
-  //   console.log(this.state.typeUser);
-  // };
 
   //update Proposal
   updateProposal = (id, url) => {
@@ -127,7 +127,7 @@ export class AppProvider extends Component {
 
   clearEvery = () => {
     this.setState({
-      projects: []
+      error: false
     })
   }
 
@@ -187,3 +187,4 @@ export class AppProvider extends Component {
     );
   }
 }
+
