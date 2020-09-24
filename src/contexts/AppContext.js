@@ -23,12 +23,11 @@ export class AppProvider extends Component {
   state = {
     typeUser: "client",
     projects: [],
-    error: false,
+    error: null,
     id: 1,
   };
 
   componentDidMount() {
-    console.log(this.props)
     // projects 
     this.setUser()
   }
@@ -90,7 +89,10 @@ export class AppProvider extends Component {
       return data;
     })
     .then(data => {
+      if(note.length > 0)
         this.updateNotes(data.id, note, 'POST', 'notes')
+      else
+        console.log("no notes")
     })
     .catch(err => console.log(err));
     
@@ -118,10 +120,14 @@ export class AppProvider extends Component {
     const project = {
       approval: meta
     }
-    console.log(project)
     return serve.updateProject(id, project)
     .then((data) => {
-      return data;
+      let projects = [...this.state.projects];
+      let projectId = projects.filter((project) => project.id === data.id)[0];
+      let projectoo = projects.indexOf(projectId);
+      projects[projectoo] = data;
+      this.setState({ projects });
+      // return data;
     });
   };
 
@@ -137,7 +143,6 @@ export class AppProvider extends Component {
       content: _note,
       type: type,
       date_created: new Date(),
-      created_by: "client",
       project_id: id,
     };
 

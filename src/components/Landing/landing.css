@@ -153,12 +153,24 @@ p {
   align-items: center;
 }
 
-.project__change {
-  background-color: #7b9dd8;
+.project__note {
+  background-color: #5555ff;
   color: white;
   padding: 10px;
   border-radius: 4px;
   display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.project__change {
+  /* border: 1px solid #464646; */
+  font-weight: 300;
+  color: white;
+  padding: 10px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
   margin-bottom: 8px;
 }
 
@@ -170,6 +182,19 @@ p {
   bottom: 20px;
   right: 20px;
   box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.06), 0 2px 32px 0 rgba(0, 0, 0, 0.16);
+}
+
+.DayPicker {
+  margin-bottom: 24px;
+}
+
+.DayPicker-wrapper {
+  border: 1px solid #464646;
+  border-radius: 4px;
+}
+
+.DayPicker-Day--disabled {
+  color: #424242;
 }
 
 .typelist {
@@ -206,12 +231,34 @@ iframe {
   height: 35px;
 }
 
+.delivercost {
+  display: block;
+  font-size: 48px;
+  color: #85bb65;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .project__notes {
   width: 90%;
+  margin-bottom: 24px;
 }
 
 .project__changelog {
   width: 90%;
+}
+
+.project_deliverables {
+  width: 100%;
+}
+
+.project_deliverables ul {
+  list-style: none;
+  padding-left: 0;
+  display: flex;
+  justify-content: space-evenly;
 }
 
 input[type="text"],
@@ -238,7 +285,9 @@ input[type="email"] {
 }
 
 textarea {
-  font-family: "Rubik", sans-serif;
+  font-family: inherit;
+  font-weight: inherit;
+  font-size: 16px;
   height: 80px;
   resize: none;
   overflow: hidden;
@@ -253,7 +302,7 @@ textarea {
 
 textarea:focus {
   outline: none !important;
-  border: 1px solid #4c9aff;
+  border: 1px solid #5555ff;
 }
 
 button,
@@ -306,9 +355,10 @@ button,
 
 .delblock,
 .typeblock {
-  height: 120px;
+  height: 130px;
   width: calc(33% - 15px);
-  /* display: inline-block; */
+  display: flex;
+  flex-direction: column;
   margin-left: 0;
   margin-right: 4px;
   border-radius: 4px;
@@ -321,6 +371,9 @@ button,
 
 .typeblock {
   width: calc(50% - 15px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .delblock,
@@ -343,6 +396,21 @@ button,
 input[type="password"],
 input[type="email"] {
   margin: 20px 0px;
+}
+
+.projecttime {
+  margin-bottom: 24px;
+}
+
+.project__approval {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.project__content {
+  flex-grow: 1;
+  text-align: left;
 }
 
 .intercom-lightweight-app-launcher-icon {
@@ -369,10 +437,9 @@ input[type="email"] {
     width: calc(50% - 16px);
   }
   .types {
-    flex-wrap: wrap!important;
+    flex-wrap: wrap !important;
   }
   .typeblock {
     width: calc(50% - 16px);
-    
   }
 }

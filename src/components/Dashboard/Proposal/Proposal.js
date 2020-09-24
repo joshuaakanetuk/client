@@ -1,6 +1,8 @@
 import React from "react";
 import AppContext from "../../../contexts/AppContext";
 import Permission from "../../Permission/Permission";
+import DayPicker from "react-day-picker";
+import "react-day-picker/lib/style.css";
 
 // auto pricing logic here
 const types = [
@@ -51,22 +53,30 @@ const deliverablesTypes = [
 class Proposal extends React.Component {
   static contextType = AppContext;
   state = {
+    error:null,
     name: "",
     type: "",
     deliverables: [],
     deliverArr: [],
     cost: 0,
     notes: "",
-    typeSelected: ''
+    typeSelected: "",
+    selectedDay: null,
   };
   typeSelect = (e) => {
     this.setState({
-      typeSelected: 
-        Number(e.currentTarget.dataset.key)
-      ,
+      typeSelected: Number(e.currentTarget.dataset.key),
     });
-
-  }
+  };
+  handleDayClick = (day,  selected = {}) => {
+    console.log(selected, day);
+    if (selected.disabled) {
+      return;
+    }
+    this.setState({
+      selectedDay: selected.selected ? undefined : day,
+    });
+  };
   selected = (e) => {
     const deliverArr = this.state.deliverArr;
     let index;
@@ -108,6 +118,9 @@ class Proposal extends React.Component {
   };
   handleDeliver = (e) => {};
   render() {
+    const disabled = {
+      after: new Date(),
+    };
     // document.title = "Proposal"
     return (
       <>
@@ -125,7 +138,7 @@ class Proposal extends React.Component {
               status: "INITIAL",
               admin_approval: false,
               client_approval: true,
-              end_timeframe: new Date(),
+              end_timeframe: this.state.selectedDay,
               price: this.state.cost,
               proposal: null,
               date_created: new Date(),
@@ -159,19 +172,17 @@ class Proposal extends React.Component {
             {types.map((type, i) => {
               return (
                 <div
-                    key={i}
-                    data-key={i}
-                    className={
-                      this.state.typeSelected === i
-                        ? "typeblock typeblock__selected"
-                        : "typeblock"
-                    }
-                    onClick={(e) => this.typeSelect(e)}
-                  >
-                    <span>
-                      {type}
-                    </span>
-                  </div>
+                  key={i}
+                  data-key={i}
+                  className={
+                    this.state.typeSelected === i
+                      ? "typeblock typeblock__selected"
+                      : "typeblock"
+                  }
+                  onClick={(e) => this.typeSelect(e)}
+                >
+                  <span>{type}</span>
+                </div>
               );
             })}
           </div>
@@ -193,6 +204,7 @@ class Proposal extends React.Component {
                     <span>
                       {deliver.emoji} — {deliver.name}
                     </span>
+                    <span className="delivercost">${deliver.cost}</span>
                   </div>
                 );
               })}
@@ -209,6 +221,19 @@ class Proposal extends React.Component {
               }}
             />
           </div>
+          <div className="projecttime">
+            <h2>When is this due?</h2>
+            <DayPicker
+              disabledDays={{ before: new Date() }}
+              onDayClick={this.handleDayClick}
+            />
+            <div>
+              {this.state.selectedDay
+                ? this.state.selectedDay.toLocaleDateString()
+                : "Please select a day 👻"}
+            </div>
+          </div>
+
           <br />
           <br />
           <h1>

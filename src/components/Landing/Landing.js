@@ -9,6 +9,7 @@ class Landing extends React.Component{
                 <p> Click on the dashboard, go to projects and submit a proposal for a new project. 
                 The goal of this application in to boilerplate a freelancer/small web agency in a box. Get proposal and track information in app. 
                 </p>
+                {/* <img alt="Web diagram" src="home.png" /> */}
                 </div>
             </main>
         );

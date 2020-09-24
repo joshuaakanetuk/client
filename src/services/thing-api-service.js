@@ -54,7 +54,7 @@ const ApiService = {
       .then(res => 
         (!res.ok)
           ? res.json().then(e => Promise.reject(e))
-          :  ""
+          :  res.json()
         
       )
   },
@@ -71,7 +71,6 @@ const ApiService = {
       )
   },
   insertNote(projectId, note) {
-    console.log(note)
     return fetch(`${config.API_ENDPOINT}/projects/${projectId}/notes`, {
       method: 'POST',
       body: JSON.stringify(note),
