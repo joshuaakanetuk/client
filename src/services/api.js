@@ -27,7 +27,6 @@ const ApiService = {
       )
   },
   insertProject(project) {
-    console.log(project)
     return fetch(`${config.API_ENDPOINT}/projects`, {
       method: 'POST',
       body: JSON.stringify(project),

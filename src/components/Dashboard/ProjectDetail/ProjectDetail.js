@@ -4,7 +4,6 @@ import Iframe from "react-iframe";
 import Permission from "../../Permission/Permission";
 import { Clock, DollarSign, X, Edit } from "react-feather";
 import { format } from "date-fns";
-import validator from "validator";
 
 class ProjectDetail extends React.Component {
   static contextType = AppContext;
@@ -58,6 +57,7 @@ class ProjectDetail extends React.Component {
     this.setState({ [e.target.name]: e.target.value });
   };
   render() {
+    const example = 'https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FVJ5VEFG3BxeW7vS4fEvQjq%2FAgency%3Fnode-id%3D0%253A1&chrome=DOCUMENTATION';
     const { match } = this.props;
     let project =
       this.context.projects.filter(
@@ -144,15 +144,17 @@ class ProjectDetail extends React.Component {
           ""
         );
 
-      if ((this.context.typeUser === 'client') &&
+      if (
+        this.context.typeUser === "client" &&
         (this.state.project.status === "INITIAL" ||
-        this.state.project.status === "DESIGN")
+          this.state.project.status === "DESIGN")
       ) {
-        return approve
-      }
-      else if((this.context.typeUser === 'admin') && this.state.project.status !== "FINISHED")
-      {
-        return approve
+        return approve;
+      } else if (
+        this.context.typeUser === "admin" &&
+        this.state.project.status !== "FINISHED"
+      ) {
+        return approve;
       }
       return;
     };
@@ -206,30 +208,46 @@ class ProjectDetail extends React.Component {
         {renderApproval()}
         <Permission>
           {project.status.length > 0 && project.status === "DESIGN" ? (
-            <>
+            <div className="project__URL m24">
               Proposal URL (add URL and update):
-              <div className="proposal__input m12">
-                <input
-                  value={this.state.project.proposal}
-                  name="proposal"
-                  onChange={(e) => {
-                    this.handleProposal(e);
-                  }}
-                />
-                <div
-                  onClick={() =>
-                    this.context
-                      .updateProposal(project.id, this.state.project.proposal)
-                      .then((data) => {
-                        this.getNotes();
-                      })
-                      .catch((err) => console.log(err))
+              <div className="urlcontain">
+                <span
+                  className="project__examplelink"
+                  onClick={() => {
+                    this.setState({
+                      project: {...this.state.project, proposal: example}
+                    })
                   }
+                }
                 >
-                  <Edit alt="Submit" width={16} />
+                  Example URL
+                </span>
+                <div className="proposal__input m12">
+                  <input
+                    type="text"
+                    style={{ fontSize: "16px" }}
+                    defaultValue={this.state.project.proposal}
+                    value={this.state.project.proposal}
+                    name="proposal"
+                    onChange={(e) => {
+                      this.handleProposal(e);
+                    }}
+                  />
+                  <div
+                    onClick={() =>
+                      this.context
+                        .updateProposal(project.id, this.state.project.proposal)
+                        .then((data) => {
+                          this.getNotes();
+                        })
+                        .catch((err) => console.log(err))
+                    }
+                  >
+                    <Edit alt="Submit" width={16} />
+                  </div>
                 </div>
               </div>
-            </>
+            </div>
           ) : (
             ""
           )}
@@ -312,7 +330,9 @@ class ProjectDetail extends React.Component {
               return (
                 <div key={i} className="project__change">
                   <div className="project__content">{notes.content}</div>
-                  <span className="project__date">{format(new Date(notes.date_created), "PPpp")}</span>
+                  <span className="project__date">
+                    {format(new Date(notes.date_created), "PPpp")}
+                  </span>
                 </div>
               );
             else return null;

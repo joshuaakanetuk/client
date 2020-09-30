@@ -41,7 +41,7 @@ a {
 h1 {
   font-size: 3em;
   font-weight: 700;
-  word-break: break-all;
+  word-break: break-word;
 }
 
 h2 {
@@ -52,6 +52,16 @@ h2 {
 
 h4 {
   text-align: left;
+}
+
+.project__note svg {
+  transition: all .2s;
+}
+
+.project__note svg:hover {
+  background-color: #4040c7;
+  border-radius: 4px;
+  transition: all .2s;
 }
 
 nav {
@@ -359,6 +369,14 @@ iframe {
   /* border: 1px solid white; */
 }
 
+.project__URL {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 90%;
+}
+
 input[type="text"],
 input[type="password"],
 input[type="email"] {
@@ -381,6 +399,19 @@ input[type="email"] {
   font-size: 42px;
   font-weight: 800;
   color: white;
+}
+
+.urlcontain {
+  width: 90%;
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.project__examplelink {
+  margin-right: 24px;
+  text-decoration: underline;
 }
 
 textarea {

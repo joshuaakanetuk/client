@@ -151,10 +151,16 @@ class Proposal extends React.Component {
             this.context
               .submitProposal(project, this.state.notes)
               .then((data) => {
+                console.log(data)
+                if('error' in data) throw data.error
                 this.props.history.push("/dashboard");
                 alert("Submitted proposal successfully!");
               })
-              .catch((err) => console.log());
+              .catch((err) => {
+                this.setState({
+                  error: err.message
+                })
+              });
           }}
         >
           <h1>Create Proposal</h1>
@@ -235,6 +241,7 @@ class Proposal extends React.Component {
           </div>
 
           <br />
+          {this.state.error}
           <br />
           <h1>
             <span aria-label="money" role="img">

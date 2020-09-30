@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import serve from "../services/thing-api-service.js";
+import serve from "../services/api.js";
 import token from "../services/token";
 
 const AppContext = React.createContext({
@@ -75,7 +75,7 @@ export class AppProvider extends Component {
           error: true,
         });
       });
-  }
+  };
 
   deleteNote(id) {
     return serve.deleteNote(id).then((data) => {
@@ -117,8 +117,11 @@ export class AppProvider extends Component {
       .then((data) => {
         initNote.project_id = data.id;
         this.updateNotes(data.id, initNote.content, "POST", "changelog");
+        return data;
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        return err;
+      });
   };
 
   //update Proposal
@@ -145,12 +148,11 @@ export class AppProvider extends Component {
         return data;
       })
       .then((data) => {
-        return serve
+        serve
           .insertNote(data.id, updatedNote)
-          .then((data) => {
-            return data;
-          })
+          .then((notes) => {})
           .catch((err) => console.log(err));
+        return data;
       });
   };
 
@@ -176,12 +178,11 @@ export class AppProvider extends Component {
         return data;
       })
       .then((data) => {
-        return serve
+        serve
           .insertNote(data.id, updatedNote)
-          .then((data) => {
-            return data;
-          })
+          .then((data) => {})
           .catch((err) => console.log(err));
+        return data;
       });
   };
 
