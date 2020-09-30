@@ -13,9 +13,9 @@ class Project extends React.Component {
         <NavLink className="project" to={`/dashboard/projects/` + project.id}>
           <div className="project__name">{project.name}</div>
           <div className="project__status">{project.status}</div>
-          <div>{formatDistance(new Date(project.end_timeframe), new Date()) + ` ago.`}</div>
+          <div className="project__time">{`due in ` + formatDistance(new Date(project.end_timeframe), new Date())}</div>
           <Permission>
-          <div style={{color: '#86ff86'}}>${project.price} USD</div>
+          <div className="project__price" style={{color: '#86ff86'}}>${project.price} USD</div>
           </Permission>
         </NavLink>
     );

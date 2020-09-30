@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import serve from "../services/thing-api-service.js";
-import token from '../services/token'
+import token from "../services/token";
 
 const AppContext = React.createContext({
   projects: [],
@@ -17,7 +17,7 @@ const AppContext = React.createContext({
   updateProposal: () => {},
 });
 
-export default (AppContext);
+export default AppContext;
 
 export class AppProvider extends Component {
   state = {
@@ -28,39 +28,53 @@ export class AppProvider extends Component {
   };
 
   componentDidMount() {
-    // projects 
-    this.setUser()
+    // projects
+    this.setUser();
   }
 
   getProjects = () => {
-    serve.getProjects()
-    .then((data) => {
-      this.setState({
-        projects: data,
-      });
-    })
-    .catch(err => {
-      token.clearAuthToken()
-      token.clearUser()
-      this.setState({
-      error: true
+    serve
+      .getProjects()
+      .then((data) => {
+        this.setState({
+          projects: data,
+        });
       })
-    });
-  }
+      .catch((err) => {
+        token.clearAuthToken();
+        token.clearUser();
+        this.setState({
+          error: true,
+        });
+      });
+  };
 
-  getNotes(id) {
+  getNotes = (id) => {
     return serve
       .getProjectNotes(id)
       .then((data) => {
         return data;
       })
-      .catch((err) => console.log(err));
-  }
+      .catch((err) => {
+        this.setState({
+          error: true,
+        });
+      });
+  };
 
-  getProject(id) {
-    return serve.getProject(id).then((data) => {
-      return data;
-    });
+  getProject = (id) => {
+    return serve
+      .getProject(id)
+      .then((data) => {
+        return data;
+      })
+      .catch((err) => {
+        token.clearAuthToken();
+        token.clearUser();
+        this.setState({
+          error: true,
+        });
+      });
   }
 
   deleteNote(id) {
@@ -71,71 +85,111 @@ export class AppProvider extends Component {
 
   setUser = () => {
     let user = JSON.parse(token.getUser());
-    
-    if(user) {
+
+    if (user) {
       this.setState({
         id: user.user_id,
-        typeUser: user.type
-      })
+        typeUser: user.type,
+      });
     }
-  }
+  };
 
   submitProposal = (project, note) => {
-    return serve.insertProject(project)
-    .then((data) => {
-      this.setState({
-        projects: [...this.state.projects, data]
+    const initNote = {
+      content: "proposed project",
+      type: "changelog",
+      date_created: new Date(),
+      project_id: "",
+    };
+
+    return serve
+      .insertProject(project)
+      .then((data) => {
+        this.setState({
+          projects: [...this.state.projects, data],
+        });
+        return data;
       })
-      return data;
-    })
-    .then(data => {
-      if(note.length > 0)
-        this.updateNotes(data.id, note, 'POST', 'notes')
-      else
-        console.log("no notes")
-    })
-    .catch(err => console.log(err));
-    
+      .then((data) => {
+        if (note.length > 0) this.updateNotes(data.id, note, "POST", "notes");
+        return data;
+      })
+      .then((data) => {
+        initNote.project_id = data.id;
+        this.updateNotes(data.id, initNote.content, "POST", "changelog");
+      })
+      .catch((err) => console.log(err));
   };
 
   //update Proposal
-  updateProposal = (id, url) => {
-    // gets current projects
-    let projects = [...this.state.projects];
-    // get project adding/updating to
-    let projectId = projects.filter((project) => project.id === id)[0];
-    // get index for later
-    let projectoo = projects.indexOf(projectId);
+  updateProposal = (id, data) => {
+    const updatedNote = {
+      content: "updated proposal",
+      type: "changelog",
+      date_created: new Date(),
+      project_id: id,
+    };
 
-    let newP = { ...projectId };
-    newP.proposal.url = url;
+    const project = {
+      proposal: data,
+    };
 
-    console.log(newP);
-
-    projects[projectoo] = newP;
-    this.setState({ projects });
+    return serve
+      .updateProject(id, project)
+      .then((data) => {
+        let projects = [...this.state.projects];
+        let projectId = projects.filter((project) => project.id === data.id)[0];
+        let projectoo = projects.indexOf(projectId);
+        projects[projectoo] = data;
+        this.setState({ projects });
+        return data;
+      })
+      .then((data) => {
+        return serve
+          .insertNote(data.id, updatedNote)
+          .then((data) => {
+            return data;
+          })
+          .catch((err) => console.log(err));
+      });
   };
 
   updateApproval = (id, meta, content) => {
+    const updatedNote = {
+      content,
+      type: "changelog",
+      date_created: new Date(),
+      project_id: id,
+    };
+
     const project = {
-      approval: meta
-    }
-    return serve.updateProject(id, project)
-    .then((data) => {
-      let projects = [...this.state.projects];
-      let projectId = projects.filter((project) => project.id === data.id)[0];
-      let projectoo = projects.indexOf(projectId);
-      projects[projectoo] = data;
-      this.setState({ projects });
-      // return data;
-    });
+      approval: meta,
+    };
+    return serve
+      .updateProject(id, project)
+      .then((data) => {
+        let projects = [...this.state.projects];
+        let projectId = projects.filter((project) => project.id === data.id)[0];
+        let projectoo = projects.indexOf(projectId);
+        projects[projectoo] = data;
+        this.setState({ projects });
+        return data;
+      })
+      .then((data) => {
+        return serve
+          .insertNote(data.id, updatedNote)
+          .then((data) => {
+            return data;
+          })
+          .catch((err) => console.log(err));
+      });
   };
 
   clearEvery = () => {
     this.setState({
-      error: false
-    })
-  }
+      error: false,
+    });
+  };
 
   // notes
   updateNotes = (id, _note, action, type) => {
@@ -147,23 +201,24 @@ export class AppProvider extends Component {
     };
 
     if (action === "POST") {
-      return serve.insertNote(id, updatedNote)
-      .then((data) => {
-        return data;
-      })
-      .catch(err => console.log(err));
+      return serve
+        .insertNote(id, updatedNote)
+        .then((data) => {
+          return data;
+        })
+        .catch((err) => console.log(err));
     }
 
     if (action === "DELETE") {
-      return serve.deleteNote(id, {_note})
-      .then((data) => {
-        return data;
-      })
-      .catch(err => console.log(err));
+      return serve
+        .deleteNote(id, { _note })
+        .then((data) => {
+          return data;
+        })
+        .catch((err) => console.log(err));
     }
 
     console.log(id, _note, action, type);
-  
   };
 
   render() {
@@ -183,7 +238,7 @@ export class AppProvider extends Component {
       updateProposal: this.updateProposal,
       updateApproval: this.updateApproval,
       setUser: this.setUser,
-      clearEvery: this.clearEvery
+      clearEvery: this.clearEvery,
     };
     return (
       <AppContext.Provider value={value}>
@@ -192,4 +247,3 @@ export class AppProvider extends Component {
     );
   }
 }
-

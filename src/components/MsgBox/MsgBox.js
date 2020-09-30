@@ -6,7 +6,7 @@ class MsgBox extends React.Component{
         this.state = {}
     }
     static defaultProps = {
-        msg: "This is a component to display info."
+        msg: "Select a project to see more info or add a project!"
     }
     render() {
         return(

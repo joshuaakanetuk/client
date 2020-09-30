@@ -74,7 +74,7 @@ class SignIn extends React.Component {
           password.value = "";
           full_name.value = "";
           email.value = "";
-          this.setState({wasCopied: "Registration complete."})
+          this.setState({wasCopied: "Registration complete. Feel free to login!"})
         })
         .catch((res) => {
           this.setState({ error: res.error });
@@ -113,7 +113,7 @@ class SignIn extends React.Component {
 
     return (
       <div className="dashboard">
-        {this.state.wasCopied}
+        <span className="m12">{this.state.wasCopied}</span>
         <MsgBox msg={copy} />
         <form id="login" onSubmit={this.handleSubmitJwtAuth}>
           <small>{this.state.error}</small>

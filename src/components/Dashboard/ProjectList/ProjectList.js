@@ -13,7 +13,7 @@ class ProjectList extends React.Component{
     render() {
         return(
             <div className="project__list">
-                {this.props.projects.map((project, i) => <Project project={project} key={i} />)}
+                {[...this.props.projects].reverse().map((project, i) => <Project project={project} key={i} />)}
             </div>
         );
     }

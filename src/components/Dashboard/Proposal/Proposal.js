@@ -53,7 +53,7 @@ const deliverablesTypes = [
 class Proposal extends React.Component {
   static contextType = AppContext;
   state = {
-    error:null,
+    error: null,
     name: "",
     type: "",
     deliverables: [],
@@ -68,7 +68,7 @@ class Proposal extends React.Component {
       typeSelected: Number(e.currentTarget.dataset.key),
     });
   };
-  handleDayClick = (day,  selected = {}) => {
+  handleDayClick = (day, selected = {}) => {
     console.log(selected, day);
     if (selected.disabled) {
       return;
@@ -142,7 +142,6 @@ class Proposal extends React.Component {
               price: this.state.cost,
               proposal: null,
               date_created: new Date(),
-              date_modified: new Date(),
               user_id: null,
               deliverables: this.state.deliverArr
                 .map((del) => del.name)
@@ -215,6 +214,7 @@ class Proposal extends React.Component {
             <br />
             <br />
             <textarea
+              id="textareanotes"
               name="notes"
               onChange={(e) => {
                 this.handleChangeString("notes", e);

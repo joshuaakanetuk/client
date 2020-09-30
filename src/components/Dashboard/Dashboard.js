@@ -36,7 +36,7 @@ class Dashboard extends React.Component {
                       }
                       className="proposal__link"
                     >
-                      <div><Plus/></div>
+                      <Plus size={32}/>
                     </div>
                   </Permission>
                 </>
