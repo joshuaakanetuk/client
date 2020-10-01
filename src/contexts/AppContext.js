@@ -28,10 +28,10 @@ export class AppProvider extends Component {
   };
 
   componentDidMount() {
-    // projects
     this.setUser();
   }
 
+  // function to get all of the projects
   getProjects = () => {
     serve
       .getProjects()

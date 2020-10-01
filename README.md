@@ -30,11 +30,11 @@ TODO:
 
 ## Developing 
 
-You'll need PostgreSQL installed if you don't have that already. 
+You'll need `client-server` to be active and running before starting this repo.
 
-1. Clone from ```https://github.com/joshuaakanetuk/client-server``` & ```https://github.com/joshuaakanetuk/client```
-2. Run npm i on both cloned folders.
-3. Run npm run dev for 
+- Clone from `https://github.com/joshuaakanetuk/client`
+- cd into cloned folder run `npm i` 
+- Run `npm run dev`
 
 
 ## Copyright

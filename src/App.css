@@ -19,7 +19,12 @@ body,
   font-weight: 600;
   width: 100%;
   height: calc(100vh - 75px);
+  text-align: center;
 
+}
+
+body {
+  margin: 0;
 }
 
 main {
@@ -148,7 +153,7 @@ p {
   height: auto;
   width: 100%;
   display: flex;
-  margin-bottom: 40px;
+  margin-bottom: 80px;
   justify-content: center;
   flex-direction: column;
   align-items: center;
