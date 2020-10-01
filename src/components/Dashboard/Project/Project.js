@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 import Permission from "../../Permission/Permission";
 import { formatDistance } from 'date-fns';
 
+// renders a project for ProjectList
 class Project extends React.Component {
   static contextType = AppContext;
 

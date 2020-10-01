@@ -1,5 +1,6 @@
 import React from 'react'
 
+// class to create a box with info
 class MsgBox extends React.Component{
     constructor(props) {
         super(props)
@@ -10,11 +11,9 @@ class MsgBox extends React.Component{
     }
     render() {
         return(
-            <>
-            <div className="msgbox__shell">
+            <figure className="msgbox__shell">
                 {this.props.msg}
-            </div>
-            </>
+            </figure>
         );
     }
 }

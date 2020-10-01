@@ -1,5 +1,5 @@
 # Client
-<a href="https://joshuaakanetuk.github.io/watched" title="">
+<a href="https://client-sandy.vercel.app" title="Client">
   <img src="public/1.png" title="Screenshot of application.">
 </a>
 
@@ -28,12 +28,13 @@ TODO:
 - React
 - PostgreSQL
 
-## Developing 
+## Installation & Development 
 
 You'll need `client-server` to be active and running before starting this repo.
 
-- Clone from `https://github.com/joshuaakanetuk/client`
-- cd into cloned folder run `npm i` 
+- Clone from [`https://github.com/joshuaakanetuk/client`](https://github.com/joshuaakanetuk/client-server)
+- `cd` into `client`
+- Run `npm i` 
 - Run `npm run dev`
 
 

@@ -1,13 +1,13 @@
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
 import AppContext from "../../contexts/AppContext";
-// import Permission from "../Permission/Permission";
 import token from "../../services/token";
 
 class Nav extends React.Component {
   static contextType = AppContext;
   render() {
     const { location } = this.props;
+    // navigation for landing page/non app pages
     const landingNav = (
       <nav>
         <span
@@ -22,12 +22,13 @@ class Nav extends React.Component {
           {token.getAuthToken() ? (
             <>
             <Link to="/dashboard">Dashboard</Link>
+            {/* hacky way to kind styling and also have a href */}
               <Link
                 to=""
                 onClick={() => {
                   token.clearAuthToken();
                   token.clearUser();
-                  this.context.clearEvery();
+                  this.context.clearError();
                   this.props.history.push("/");
                 }}
               >
@@ -48,7 +49,7 @@ class Nav extends React.Component {
         </div>
       </nav>
     );
-
+    // navigation for dashboard app      
     const dashboardNav = (
       <nav>
         <span
@@ -61,12 +62,13 @@ class Nav extends React.Component {
         </span>
         <div className="links">
         <Link to="/dashboard">Dashboard</Link>
+        {/* hacky way to kind styling and also have a href */}
           <Link
             to=""
             onClick={() => {
               token.clearAuthToken();
               token.clearUser();
-              this.context.clearEvery();
+              this.context.clearError();
               this.props.history.push("/");
             }}
           >

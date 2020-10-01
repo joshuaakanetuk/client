@@ -1,6 +1,7 @@
 import React from 'react'
 import AppContext from "../../contexts/AppContext";
 
+// class to conditionally render based on user type
 class Permission extends React.Component{
     static contextType = AppContext;
     render() {

@@ -25,6 +25,7 @@ class ProjectDetail extends React.Component {
     proposalUrl: "",
     feedback: "",
   };
+  // get project and notes for project
   componentDidMount() {
     this.getProject();
     this.getNotes();
@@ -43,16 +44,16 @@ class ProjectDetail extends React.Component {
       this.setState({ notes: data });
     });
   };
-
+// handle text changing on proposal url
   handleProposal = (e) => {
     let inputValue = e.target.value;
     let project = Object.assign({}, this.state.project);
     project["proposal"] = inputValue;
-    console.log(project);
     this.setState({
       project,
     });
   };
+  // handle text changing on first level state variables
   handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
@@ -160,7 +161,7 @@ class ProjectDetail extends React.Component {
     };
 
     return (
-      <div
+      <section
         style={{
           padding: "25px",
           width: "100%",
@@ -338,7 +339,7 @@ class ProjectDetail extends React.Component {
             else return null;
           })}
         </div>
-      </div>
+      </section>
     );
   }
 }

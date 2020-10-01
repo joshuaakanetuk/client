@@ -27,6 +27,7 @@ export class AppProvider extends Component {
     id: 1,
   };
 
+  // after mounting set user
   componentDidMount() {
     this.setUser();
   }
@@ -49,6 +50,7 @@ export class AppProvider extends Component {
       });
   };
 
+  // function to get all of the notes for a project
   getNotes = (id) => {
     return serve
       .getProjectNotes(id)
@@ -62,6 +64,7 @@ export class AppProvider extends Component {
       });
   };
 
+  // function to get project info
   getProject = (id) => {
     return serve
       .getProject(id)
@@ -77,12 +80,15 @@ export class AppProvider extends Component {
       });
   };
 
+  // function to delete a note
   deleteNote(id) {
     return serve.deleteNote(id).then((data) => {
       return data;
     });
   }
 
+
+  // function to set state for conditional rendering
   setUser = () => {
     let user = JSON.parse(token.getUser());
 
@@ -94,7 +100,9 @@ export class AppProvider extends Component {
     }
   };
 
+  // function to submit new project to server
   submitProposal = (project, note) => {
+    // create changelog
     const initNote = {
       content: "proposed project",
       type: "changelog",
@@ -124,7 +132,7 @@ export class AppProvider extends Component {
       });
   };
 
-  //update Proposal
+  // function to update the url for a design proposal 
   updateProposal = (id, data) => {
     const updatedNote = {
       content: "updated proposal",
@@ -156,6 +164,8 @@ export class AppProvider extends Component {
       });
   };
 
+
+// function to make an approval or decline a status
   updateApproval = (id, meta, content) => {
     const updatedNote = {
       content,
@@ -186,13 +196,15 @@ export class AppProvider extends Component {
       });
   };
 
-  clearEvery = () => {
+
+// function to clear error status
+  clearError = () => {
     this.setState({
       error: false,
     });
   };
 
-  // notes
+  // function to add or update notes
   updateNotes = (id, _note, action, type) => {
     const updatedNote = {
       content: _note,
@@ -201,6 +213,7 @@ export class AppProvider extends Component {
       project_id: id,
     };
 
+    // add note
     if (action === "POST") {
       return serve
         .insertNote(id, updatedNote)
@@ -209,7 +222,7 @@ export class AppProvider extends Component {
         })
         .catch((err) => console.log(err));
     }
-
+    // delete note
     if (action === "DELETE") {
       return serve
         .deleteNote(id, { _note })
@@ -218,8 +231,6 @@ export class AppProvider extends Component {
         })
         .catch((err) => console.log(err));
     }
-
-    console.log(id, _note, action, type);
   };
 
   render() {
@@ -228,7 +239,6 @@ export class AppProvider extends Component {
       typeUser: this.state.typeUser,
       error: this.state.error,
       setError: this.setError,
-      clearError: this.clearError,
       changeUserType: this.changeUserType,
       getNotes: this.getNotes,
       getProject: this.getProject,
@@ -239,7 +249,7 @@ export class AppProvider extends Component {
       updateProposal: this.updateProposal,
       updateApproval: this.updateApproval,
       setUser: this.setUser,
-      clearEvery: this.clearEvery,
+      clearError: this.clearError,
     };
     return (
       <AppContext.Provider value={value}>

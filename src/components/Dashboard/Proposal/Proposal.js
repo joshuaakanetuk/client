@@ -4,7 +4,7 @@ import Permission from "../../Permission/Permission";
 import DayPicker from "react-day-picker";
 import "react-day-picker/lib/style.css";
 
-// auto pricing logic here
+// types of products
 const types = [
   "Single Product Store",
   "Online Store",
@@ -12,6 +12,7 @@ const types = [
   "Portfolio",
 ];
 
+// type of deliverables
 const deliverablesTypes = [
   {
     name: "Shopify",
@@ -63,13 +64,14 @@ class Proposal extends React.Component {
     typeSelected: "",
     selectedDay: null,
   };
+  // handle on click of type 
   typeSelect = (e) => {
     this.setState({
       typeSelected: Number(e.currentTarget.dataset.key),
     });
   };
+  // handle date on click
   handleDayClick = (day, selected = {}) => {
-    console.log(selected, day);
     if (selected.disabled) {
       return;
     }
@@ -77,6 +79,7 @@ class Proposal extends React.Component {
       selectedDay: selected.selected ? undefined : day,
     });
   };
+  // handle deliverables on click
   selected = (e) => {
     const deliverArr = this.state.deliverArr;
     let index;
@@ -113,25 +116,19 @@ class Proposal extends React.Component {
       cost: newCost,
     });
   };
+  // handle text changing on first level state variables
   handleChangeString = (element, value) => {
     this.setState({ [value.target.name]: value.target.value });
   };
-  handleDeliver = (e) => {};
   render() {
-    const disabled = {
-      after: new Date(),
-    };
-    // document.title = "Proposal"
     return (
       <>
-        {/* <Permission override={true}> */}
         <form
           style={{
             width: "80%",
           }}
           onSubmit={(e) => {
             e.preventDefault();
-            // FETCH GOES HERE {}
             const project = {
               name: this.state.name,
               type: types[this.state.typeSelected],
@@ -151,7 +148,6 @@ class Proposal extends React.Component {
             this.context
               .submitProposal(project, this.state.notes)
               .then((data) => {
-                console.log(data)
                 if('error' in data) throw data.error
                 this.props.history.push("/dashboard");
                 alert("Submitted proposal successfully!");
@@ -251,7 +247,6 @@ class Proposal extends React.Component {
           </h1>
           <input className="button" type="submit" />
         </form>
-        {/* </Permission> */}
         <Permission>
           You are an admin and don't need to submit proposals to yourself!
         </Permission>

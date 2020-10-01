@@ -8,9 +8,11 @@ import Permission from "../Permission/Permission";
 import MsgBox from "../MsgBox/MsgBox";
 import { Plus } from "react-feather";
 
+
 class Dashboard extends React.Component {
   static contextType = AppContext;
 
+  // on load of page get user and project
   componentDidMount() {
     this.context.setUser();
     this.context.getProjects()
@@ -18,7 +20,8 @@ class Dashboard extends React.Component {
 
   render() {
     return (
-      <div className="dashboard">
+      // either dashboard, proposal or project detail
+      <section className="dashboard">
         <Switch>
           <Route exact path="/dashboard/proposal" component={Proposal} />
           <Route
@@ -49,7 +52,7 @@ class Dashboard extends React.Component {
             component={ProjectDetail}
           />
         </Switch>
-      </div>
+      </section>
     );
   }
 }

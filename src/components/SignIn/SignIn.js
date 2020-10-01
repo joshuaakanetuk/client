@@ -10,7 +10,7 @@ class SignIn extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      wasCopied: "",
+      statusMsg: "",
       error: "",
       status: 0,
       user_name: "",
@@ -22,22 +22,26 @@ class SignIn extends React.Component {
     };
   }
 
+  // clear error messages on load
   componentDidMount = () => {
-    this.context.clearEvery();
+    this.context.clearError();
   };
 
+  // clear status messages
   clearMessages = () => {
     this.setState({
-      wasCopied: "",
+      statusMsg: "",
     });
   };
 
+  // handler for login/signup button
   handleCheck = (e) => {
     this.setState({
       loginStatus: e.currentTarget.id,
     });
   };
 
+  // handler for submittion on page
   handleSubmitJwtAuth = (ev) => {
     ev.preventDefault();
     this.setState({ error: null });
@@ -74,7 +78,7 @@ class SignIn extends React.Component {
           password.value = "";
           full_name.value = "";
           email.value = "";
-          this.setState({wasCopied: "Registration complete. Feel free to login!"})
+          this.setState({statusMsg: "Registration complete. Feel free to login!"})
         })
         .catch((res) => {
           this.setState({ error: res.error });
@@ -84,36 +88,37 @@ class SignIn extends React.Component {
   };
 
   render() {
+    // div section for copy buttons
     const copy = (
       <>
-        <div className="copyBox">
+        <section className="copyBox">
           <span className="loginCopy">User: admin</span>
           <CopyToClipboard
             onCopy={() =>
-              this.setState({ wasCopied: "Admin password was copied." })
+              this.setState({ statusMsg: "Admin password was copied." })
             }
             text={"passwOrd1@"}
           >
             <button>Click here for password for admin.</button>
           </CopyToClipboard>
-        </div>
-        <div className="copyBox">
+        </section>
+        <section className="copyBox">
           <span className="loginCopy">User: client</span>
           <CopyToClipboard
             onCopy={() =>
-              this.setState({ wasCopied: "Client password was copied." })
+              this.setState({ statusMsg: "Client password was copied." })
             }
             text={"passwOrd1@"}
           >
             <button>Click here for password for client.</button>
           </CopyToClipboard>
-        </div>
+        </section>
       </>
     );
 
     return (
-      <div className="dashboard">
-        <span className="m12">{this.state.wasCopied}</span>
+      <section className="dashboard">
+        <span style={{marginTop: '12px'}}>{this.state.statusMsg}</span>
         <MsgBox msg={copy} />
         <form id="login" onSubmit={this.handleSubmitJwtAuth}>
           <small>{this.state.error}</small>
@@ -204,7 +209,7 @@ class SignIn extends React.Component {
           </div>
           <input className="button" type="submit" value="Submit"></input>
         </form>
-      </div>
+      </section>
     );
   }
 }
