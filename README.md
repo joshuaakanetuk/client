@@ -1,14 +1,25 @@
 # Client
 <a href="https://joshuaakanetuk.github.io/watched" title="">
-  <img src="" title="Screenshot of application.">
+  <img src="public/1.png" title="Screenshot of application.">
 </a>
 
- <p align="center"><a href="">Live App</a><br><br>*insert client tagline*<br>For movie and data fanatics.</p>
+ <p align="center"><a href="https://client-sandy.vercel.app">Live App</a><br><br>📚 Manage clients, projects, documentation and more in one easy to access website<br>For freelancers and small digital agencies.</p>
 
 ## Motivation
-Inspired by my need for an freelancer dashboard.
+Inspired by my need to start a business and have everything client related in one place for accessibility and clarity.
 
 ## Features
+- Sign up for your brand
+- Request a web project in a easy to use form (instead of emails cobbled together specs)
+- See updates made to the project via the project detail
+- Responsive design
+
+TODO:
+- Chat
+- Email Notifications
+- Invoicing
+- Stripe & Paypal Support
+- Reporting
 
 ## Tech Stack
 - HTML
@@ -17,13 +28,20 @@ Inspired by my need for an freelancer dashboard.
 - React
 - PostgreSQL
 
-## Installation 
+## Developing 
+
+You'll need PostgreSQL installed if you don't have that already. 
+
+1. Clone from ```https://github.com/joshuaakanetuk/client-server``` & ```https://github.com/joshuaakanetuk/client```
+2. Run npm i on both cloned folders.
+3. Run npm run dev for 
+
 
 ## Copyright
-Copyright 2020, Joshua Akan-Etuk. Film data from TMDb.
+Copyright 2020, Joshua Akan-Etuk. 
 
 <br>
 
 <p align="center"><a href="https://joshuaakanetuk.com" title="Joshua Akan-Etuk">
-  <img src="assets/favicon.png" alt="">
+  <img src="public/favicon.png" alt="">
 </a></p>
