@@ -296,7 +296,7 @@ p {
 }
 
 .DayPicker-Day--disabled {
-  color: #424242;
+  color: #424242!important;
 }
 
 .typelist {

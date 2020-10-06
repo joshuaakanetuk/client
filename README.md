@@ -32,7 +32,7 @@ TODO:
 
 You'll need `client-server` to be active and running before starting this repo.
 
-- Clone from [`https://github.com/joshuaakanetuk/client`](https://github.com/joshuaakanetuk/client-server)
+- Clone from [`https://github.com/joshuaakanetuk/client`](https://github.com/joshuaakanetuk/client)
 - `cd` into `client`
 - Run `npm i` 
 - Run `npm run dev`

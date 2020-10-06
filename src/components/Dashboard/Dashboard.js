@@ -13,6 +13,7 @@ class Dashboard extends React.Component {
   static contextType = AppContext;
 
   // on load of page get user and project
+  // either dashboard, proposal or project detail
   componentDidMount() {
     this.context.setUser();
     this.context.getProjects()
@@ -20,7 +21,6 @@ class Dashboard extends React.Component {
 
   render() {
     return (
-      // either dashboard, proposal or project detail
       <section className="dashboard">
         <Switch>
           <Route exact path="/dashboard/proposal" component={Proposal} />

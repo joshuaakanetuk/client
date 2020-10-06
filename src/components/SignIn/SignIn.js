@@ -3,6 +3,7 @@ import auth from "../../services/auth";
 import token from "../../services/token";
 import AppContext from "../../contexts/AppContext.js";
 import MsgBox from "../MsgBox/MsgBox";
+import { withRouter } from "react-router-dom";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
 class SignIn extends React.Component {
@@ -214,4 +215,4 @@ class SignIn extends React.Component {
   }
 }
 
-export default SignIn;
+export default withRouter(SignIn);
