@@ -145,6 +145,7 @@ class SignIn extends React.Component {
             </>
           ) : (
             <>
+            <div style={{marginBottom:"20px"}}>Password must be at least 8 character and contain 1 upper case,<br></br>lower case, number and a special character.</div><br></br>
               <label htmlFor="user_name">Username:</label>
               <input
                 type="text"
