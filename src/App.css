@@ -83,6 +83,10 @@ input, button {
     Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
+input[type="button"] {
+  cursor: pointer;
+}
+
 /* Utils */
 
 .m12 {
